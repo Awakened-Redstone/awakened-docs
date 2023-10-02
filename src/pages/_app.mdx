@@ -1,0 +1,20 @@
+import '@/styles/globals.css'
+import Head from "next/head";
+
+export default function App({Component, pageProps}) {
+
+    return (
+        <>
+            <Head>
+                <meta name="description" content="Awakened Redstone's website"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <meta name="twitter:card" content="summary_large_image"/>
+                <meta property="og:image" content="/assets/redstone_border.png"/>
+                <link rel="icon" href="/assets/redstone_border.png"/>
+            </Head>
+            <main>
+                <Component {...pageProps} />
+            </main>
+        </>
+    )
+}

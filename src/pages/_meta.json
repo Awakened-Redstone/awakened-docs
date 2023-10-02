@@ -1,0 +1,10 @@
+{
+    "index": {
+        "title": "Home",
+        "type": "page"
+    },
+    "minecraft": {
+        "title": "Minecraft",
+        "type": "page"
+    }
+}
