@@ -16,15 +16,27 @@ components:
       name: twitch_username
       in: path
       required: true
-      description: The username of the Twitch user
+      description: The username or ID of the Twitch user
       schema:
         oneOf:
           - type: string
+
             pattern: '^[a-zA-Z\d]\w{0,24}$'
             example: [ xemdo, awakenedRedstone, CaptainSparklez ]
           - type: integer
-            example: [ 815300980, 125357239, 71092938, 141981764, 1 ]
             format: int32
+            example: [ 815300980, 125357239, 71092938, 141981764, 1 ]
+
+    TwitchId:
+      name: twitch_id
+      in: path
+      description: The ID of the broadcaster whose chat badges you want to get.
+      required: true
+      schema:
+        type: integer
+        format: int32
+        example: 815300980
+
   schemas:
     GetUsersResponse:
       type: object
@@ -56,10 +68,10 @@ components:
           description: An ID that identifies the user.
         login:
           type: string
-          description: The user’s login name.
+          description: The user\'s login name.
         display_name:
           type: string
-          description: The user’s display name.
+          description: The user\'s display name.
         type:
           type: string
           description: "The type of user. Possible values are:  \n  \n* admin — Twitch
@@ -81,42 +93,106 @@ components:
             - ''
         description:
           type: string
-          description: The user’s description of their channel.
+          description: The user\'s description of their channel.
         profile_image_url:
           type: string
-          description: A URL to the user’s profile image.
+          description: A URL to the user\'s profile image.
         offline_image_url:
           type: string
-          description: A URL to the user’s offline image.
+          description: A URL to the user\'s offline image.
         view_count:
           type: integer
           description: "Will always be 0"
           deprecated: true
         created_at:
           type: string
-          description: The UTC date and time that the user’s account was created. The
+          description: The UTC date and time that the user\'s account was created. The
             timestamp is in RFC3339 format.
           format: date-time
+
+    GetChannelChatBadgesResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          description: >-
+            The list of chat badges. The list is sorted in ascending order by
+            `set_id`, and within a set, the list is sorted in ascending order by
+            `id`.
+          items:
+            $ref: '#/components/schemas/ChatBadge'
+
+    ChatBadge:
+      type: object
+      required:
+        - set_id
+        - versions
+      properties:
+        set_id:
+          type: string
+          description: >-
+            An ID that identifies this set of chat badges. For example, Bits or
+            Subscriber.
+        versions:
+          type: array
+          description: The list of chat badges in this set.
+          items:
+            type: object
+            required:
+              - id
+              - image_url_1x
+              - image_url_2x
+              - image_url_4x
+              - title
+              - description
+              - click_action
+              - click_url
+            properties:
+              id:
+                type: string
+                description: >-
+                  An ID that identifies this version of the badge. The ID can be any
+                  value. For example, for Bits, the ID is the Bits tier level, but
+                  for World of Warcraft, it could be Alliance or Horde.
+              image_url_1x:
+                type: string
+                description: A URL to the small version (18px x 18px) of the badge.
+              image_url_2x:
+                type: string
+                description: A URL to the medium version (36px x 36px) of the badge.
+              image_url_4x:
+                type: string
+                description: A URL to the large version (72px x 72px) of the badge.
+              title:
+                type: string
+                description: The title of the badge.
+              description:
+                type: string
+                description: The description of the badge.
+              click_action:
+                type: string
+                description: >-
+                  The action to take when clicking on the badge. Set to `null` if no
+                  action is specified.
+              click_url:
+                type: string
+                description: >-
+                  The URL to navigate to when clicking on the badge. Set to `null`
+                  if no URL is specified.
+
 
 paths:
   # Twitch
   /twitch/user/{twitch_username}:
     get:
-      summary: Gets information about one or more users.
+      summary: Get information from a channel
       description: |-
-        Gets information about one or more users.
-
-        You may look up users using their user ID, login name, or both but the sum total of the number of users you may look up is 100\. For example, you may specify 50 IDs and 50 names or 100 IDs or names, but you cannot specify 100 IDs and 100 names.
-
-        If you don’t specify IDs or login names, the request returns information about the user in the access token if you specify a user access token.
-
-        To include the user’s verified email address in the response, you must use a user access token that includes the **user:read:email** scope.
-
-        __Authorization:__
-
-        Requires an [app access token](https://dev.twitch.tv/docs/authentication#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication#user-access-tokens).
+        Gets information about one Twitch user.  
+        You may look up a user using their user ID or login name\.
       tags:
-        - Users
+        - Twitch
       externalDocs:
         description: Get Users
         url: https://dev.twitch.tv/docs/api/reference#get-users
@@ -131,9 +207,10 @@ paths:
             description: |
               The type of query to use. If not specified the API will guess it.
               `login` and `user` are the same thing.
+            required: false
       responses:
         '200':
-          description: Successfully retrieved the specified users’ information.
+          description: Successfully retrieved the specified users\' information.
           content:
             application/json:
               schema:
@@ -161,12 +238,76 @@ paths:
                         offline_image_url: https://static-cdn.jtvnw.net/jtv_user_pictures/3f13ab61-ec78-4fe6-8481-8682cb3b0ac2-channel_offline_image-1920x1080.png
                         view_count: 0
                         created_at: '2016-12-14T20:32:28Z'
-        '400':
+        '404':
           description: |-
-            * The _id_ or _login_ query parameter is required unless the request uses a user access token.
-            * The request exceeded the maximum allowed number of _id_ and/or _login_ query parameters.
-        '401':
-          description: |-
-            * The Authorization header is required and must contain an app access token or user access token.
-            * The access token is not valid.
-            * The ID specified in the Client-Id header does not match the client ID specified in the access token.
+            * Could not find the specified user.
+
+
+  /twitch/badges/{twitch_id}:
+    get:
+      summary: Get chat badges from a channel
+      description: >-
+        Gets the broadcaster\'s list of custom chat badges. The list is empty if
+        the broadcaster hasn\'t created custom chat badges. For information about
+        custom badges, see [subscriber
+        badges](https://help.twitch.tv/s/article/subscriber-badge-guide) and [Bits
+        badges](https://help.twitch.tv/s/article/custom-bit-badges-guide).
+
+      tags:
+        - Twitch
+      externalDocs:
+        description: Get Channel Chat Badges
+        url: 'https://dev.twitch.tv/docs/api/reference#get-channel-chat-badges'
+      operationId: get-channel-chat-badges
+      parameters:
+        - $ref: '#/components/parameters/TwitchId'
+      responses:
+        '200':
+          description: Successfully retrieved the broadcaster\'s custom chat badges.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetChannelChatBadgesResponse'
+              examples:
+                Example:
+                  description: >-
+                    _Request:_
+
+
+                    Get the list of custom chat badges that the BlueLava Twitch
+                    channel created.
+
+
+                    ```bash
+
+                    curl -X GET 'https://api.awakenedredstone.com/v2/twitch/badges/135093069'
+
+                    ```
+                  value:
+                    data:
+                      - set_id: bits
+                        versions:
+                          - id: '1'
+                            image_url_1x: >-
+                              https://static-cdn.jtvnw.net/badges/v1/743a0f3b-84b3-450b-96a0-503d7f4a9764/1
+                            image_url_2x: >-
+                              https://static-cdn.jtvnw.net/badges/v1/743a0f3b-84b3-450b-96a0-503d7f4a9764/2
+                            image_url_4x: >-
+                              https://static-cdn.jtvnw.net/badges/v1/743a0f3b-84b3-450b-96a0-503d7f4a9764/3
+                            title: cheer 1
+                            description: cheer 1
+                            click_action: visit_url
+                            click_url: 'https://bits.twitch.tv'
+                      - set_id: subscriber
+                        versions:
+                          - id: '0'
+                            image_url_1x: >-
+                              https://static-cdn.jtvnw.net/badges/v1/eb4a8a4c-eacd-4f5e-b9f2-394348310442/1
+                            image_url_2x: >-
+                              https://static-cdn.jtvnw.net/badges/v1/eb4a8a4c-eacd-4f5e-b9f2-394348310442/2
+                            image_url_4x: >-
+                              https://static-cdn.jtvnw.net/badges/v1/eb4a8a4c-eacd-4f5e-b9f2-394348310442/3
+                            title: Subscriber
+                            description: Subscriber
+                            click_action: subscribe_to_channel
+                            click_url: null

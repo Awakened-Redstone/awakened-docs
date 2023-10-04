@@ -85,11 +85,10 @@ const Summary = (props: ComponentProps<'summary'>): ReactElement => {
     const setOpen = useDetails()
     return (
         <summary
-            className={cn(
-                "flex items-center cursor-pointer list-none p-1 transition-colors hover:bg-gray-100 dark:hover:bg-neutral-800",
-                "before:mr-1 before:inline-block before:transition-transform before:content-[''] dark:before:invert",
+            className={"flex items-center cursor-pointer list-none p-1 transition-colors hover:bg-gray-100 dark:hover:bg-neutral-800 " +
+                "before:mr-1 before:inline-block before:transition-transform before:content-[''] dark:before:invert " +
                 "before:shrink-0 rtl:before:rotate-180 [[data-expanded]>&]:before:rotate-90"
-            )}
+            }
             {...props}
             onClick={e => {
                 e.preventDefault()
@@ -99,7 +98,7 @@ const Summary = (props: ComponentProps<'summary'>): ReactElement => {
     )
 }
 
-export function Collapse({children, className, isOpen, horizontal = false}: {
+function Collapse({children, className, isOpen, horizontal = false}: {
     children: ReactNode
     className?: string
     isOpen: boolean
@@ -121,7 +120,7 @@ export function Collapse({children, className, isOpen, horizontal = false}: {
         if (initialRender.current || !container || !inner) return
 
         container.classList.toggle('duration-500', !isOpen)
-        container.classList.toggle('duration-300', isOpen)
+        container.classList.toggle('duration-100', isOpen)
 
         if (horizontal) {
             // save initial width to avoid word wrapping when container width will be changed
@@ -134,8 +133,8 @@ export function Collapse({children, className, isOpen, horizontal = false}: {
         if (isOpen) {
             animationRef.current = window.setTimeout(() => {
                 // should be style property in kebab-case, not css class name
-                container.style.removeProperty('height')
-            }, 300)
+                container.style.height = `${inner.clientHeight}px`
+            }, 250)
         } else {
             setTimeout(() => {
                 if (horizontal) {
@@ -160,11 +159,12 @@ export function Collapse({children, className, isOpen, horizontal = false}: {
             <div
                 ref={innerRef}
                 className={cn(
-                    'transition-opacity duration-500 ease-in-out motion-reduce:transition-none',
+                    'transition-all duration-500 ease-in-out motion-reduce:transition-none',
                     isOpen ? 'opacity-100' : 'opacity-0',
                     className
                 )}
             >
+                <div className={"pb-2"}></div>
                 {children}
             </div>
         </div>

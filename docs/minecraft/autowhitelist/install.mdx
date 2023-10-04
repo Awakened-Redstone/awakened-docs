@@ -10,6 +10,12 @@ import {Spoiler} from "../../../src/components/spoiler";
     Basic JSON or JSON5 knowledge is highly recommended.
 </Admonition>
 
+```json5
+{
+    test: "test"
+}
+```
+
 <Admonition type={"caution"}>
     Some Discord integration mods use a different version of JDA (the library used to interact with Discord), this may cause issues or failures.
 </Admonition>
@@ -32,33 +38,28 @@ import {Spoiler} from "../../../src/components/spoiler";
         ![Creating the bot gif](https://raw.githubusercontent.com/Awakened-Redstone/Awakened-Redstone/master/assets/images/autowhitelist/create_bot_v2.gif)
     </Spoiler>
 
-    <details>
-        <summary>Important settings</summary>
+    <Spoiler title={"Important settings"}>
 
         ![Important settings gif](https://raw.githubusercontent.com/Awakened-Redstone/Awakened-Redstone/master/assets/images/autowhitelist/bot_settings_v2.gif)
-    </details>
+    </Spoiler>
 
-    <details>
-        <summary>Getting the token</summary>
+    <Spoiler title={"Getting the token"}>
 
         ![Getting the token](https://cdn.glitch.global/b4fe08b2-a216-4ca6-a836-38b072b573c1/Screenshot_1403.png)
-    </details>
+    </Spoiler>
 
-    <details>
-        <summary>Getting the client ID</summary>
+    <Spoiler title={"Getting the client ID"}>
 
         ![Getting ClientId](https://cdn.glitch.global/b4fe08b2-a216-4ca6-a836-38b072b573c1/Screenshot_1405.png)
-    </details>
+    </Spoiler>
 
-    <details>
-        <summary>Adding to your server</summary>
+    <Spoiler title={"Adding to your server"}>
 
         ![Adding to your server gif](https://github.com/Awakened-Redstone/Awakened-Redstone/blob/master/assets/images/autowhitelist/adding_bot.gif?raw=true)
-    </details>
+    </Spoiler>
 
     ### Configuring the mod
-    <details>
-        <summary>Adding the bot token</summary>
+    <Spoiler title={"Adding the bot token"}>
         ```json5 {5}
         {
             ...
@@ -70,30 +71,29 @@ import {Spoiler} from "../../../src/components/spoiler";
             ...
         }
         ```
-    </details>
+    </Spoiler>
 
-    <details>
-        <summary>Adding the client and server ID</summary>
+    <Spoiler title={"Adding the client and server ID"}>
         <Admonition type={"info"}>
             To get the server id you need to enable developer mode on Discord.<br/>
             On the app go to&nbsp;`Settings > App Settings > Advanced`&nbsp;and enable&nbsp;`Developer Mode`.
         </Admonition>
         Paste the client ID you got from the bot page into the `clientId` entry in the config.<br/>
         To get the server ID you need to right click the server icon and click `Copy Server ID`.
-        ```json5 {5-6}
+        ```json5
         {
             ...
-                // Your bot token. Never share it, anyone with it has full control of the bot
-                "token": "NEVER SHARE YOUR BOT TOKEN",
+            // Your bot token. Never share it, anyone with it has full control of the bot
+            // highlight-next-line
+            "token": "NEVER SHARE YOUR BOT TOKEN",
             "clientId": "937880657697308682",
             "discordServerId": "894529860145920118",
             ...
         }
         ```
-    </details>
+    </Spoiler>
 
-    <details>
-        <summary>Setting the entries</summary>
+    <Spoiler title={"Setting the entries"}>
 
         On the config file, `entries` will be empty by default, there you will configure what the server will do when whitelisting the players.
         There are **4** types of entries, for vanilla you have `TEAM` and `COMMAND`, if you have luckperms you can also use `LUCKPERMS_GROUP` and `LUCKPERMS_PERMISSION`.
@@ -108,8 +108,7 @@ import {Spoiler} from "../../../src/components/spoiler";
         }
         ```
 
-        <details>
-            <summary>Team example</summary>
+        <Spoiler title={"Team example"}>
 
             ```json5 copy
             {
@@ -118,9 +117,8 @@ import {Spoiler} from "../../../src/components/spoiler";
                 "team": "minecraft_team_name"
             }
             ```
-        </details>
-        <details>
-            <summary>Command example</summary>
+        </Spoiler>
+        <Spoiler title={"Command example"}>
 
             ```json5 copy
             {
@@ -130,9 +128,8 @@ import {Spoiler} from "../../../src/components/spoiler";
                 "removeCommand": "scorereboard players reset %player% cool_people"
             }
             ```
-        </details>
-        <details>
-            <summary>Whitelist example</summary>
+        </Spoiler>
+        <Spoiler title={"Whitelist example"}>
             This was added on 1.0.0 Alpha 6!
 
             ```json5 copy
@@ -141,9 +138,8 @@ import {Spoiler} from "../../../src/components/spoiler";
                 "type": "WHITELIST" //It does no extra action, it just whitelists the player
             }
             ```
-        </details>
-        <details>
-            <summary>Luckperms examples</summary>
+        </Spoiler>
+        <Spoiler title={"Luckperms examples"}>
 
             <Tabs>
                 <TabItem value="group" label="Group" default>
@@ -165,13 +161,12 @@ import {Spoiler} from "../../../src/components/spoiler";
                     ```
                 </TabItem>
             </Tabs>
-        </details>
+        </Spoiler>
 
         The `admins` entry is an option that allows the users in it to use the developer commands. In the option you put the ID of the users you want to have access to the dev commands.
-    </details>
+    </Spoiler>
 
-    <details>
-        <summary>You can find an example configuration file here</summary>
+    <Spoiler title={"You can find an example configuration file here"}>
 
         ```json5
         {
@@ -207,6 +202,6 @@ import {Spoiler} from "../../../src/components/spoiler";
             ]
         }
         ```
-    </details>
+    </Spoiler>
 
 </Steps>
