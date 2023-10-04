@@ -1,0 +1,172 @@
+openapi: 3.0.0
+
+info:
+  version: 2.0.0
+  title: Awakened API
+  description: |
+    Awakened Redstone's custom API for their projects and tests.
+
+servers:
+  - url: https://api.awakenedredstone.com/v2
+    description: Production server
+
+components:
+  parameters:
+    TwitchUsernameOrId:
+      name: twitch_username
+      in: path
+      required: true
+      description: The username of the Twitch user
+      schema:
+        oneOf:
+          - type: string
+            pattern: '^[a-zA-Z\d]\w{0,24}$'
+            example: [ xemdo, awakenedRedstone, CaptainSparklez ]
+          - type: integer
+            example: [ 815300980, 125357239, 71092938, 141981764, 1 ]
+            format: int32
+  schemas:
+    GetUsersResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          description: The list of users.
+          items:
+            "$ref": "#/components/schemas/User"
+
+    User:
+      type: object
+      required:
+        - id
+        - login
+        - display_name
+        - type
+        - broadcaster_type
+        - description
+        - profile_image_url
+        - offline_image_url
+        - view_count
+        - created_at
+      properties:
+        id:
+          type: string
+          description: An ID that identifies the user.
+        login:
+          type: string
+          description: The user’s login name.
+        display_name:
+          type: string
+          description: The user’s display name.
+        type:
+          type: string
+          description: "The type of user. Possible values are:  \n  \n* admin — Twitch
+            administrator\n* global\\_mod\n* staff — Twitch staff\n* \"\" — Normal user"
+          enum:
+            - admin
+            - global_mod
+            - staff
+            - ''
+        broadcaster_type:
+          type: string
+          description: "The type of broadcaster. Possible values are:  \n  \n* affiliate
+            — An [affiliate broadcaster](https://help.twitch.tv/s/article/joining-the-affiliate-program
+            target=)\n* partner — A [partner broadcaster](https://help.twitch.tv/s/article/partner-program-overview)\n*
+            \"\" — A normal broadcaster"
+          enum:
+            - affiliate
+            - partner
+            - ''
+        description:
+          type: string
+          description: The user’s description of their channel.
+        profile_image_url:
+          type: string
+          description: A URL to the user’s profile image.
+        offline_image_url:
+          type: string
+          description: A URL to the user’s offline image.
+        view_count:
+          type: integer
+          description: "Will always be 0"
+          deprecated: true
+        created_at:
+          type: string
+          description: The UTC date and time that the user’s account was created. The
+            timestamp is in RFC3339 format.
+          format: date-time
+
+paths:
+  # Twitch
+  /twitch/user/{twitch_username}:
+    get:
+      summary: Gets information about one or more users.
+      description: |-
+        Gets information about one or more users.
+
+        You may look up users using their user ID, login name, or both but the sum total of the number of users you may look up is 100\. For example, you may specify 50 IDs and 50 names or 100 IDs or names, but you cannot specify 100 IDs and 100 names.
+
+        If you don’t specify IDs or login names, the request returns information about the user in the access token if you specify a user access token.
+
+        To include the user’s verified email address in the response, you must use a user access token that includes the **user:read:email** scope.
+
+        __Authorization:__
+
+        Requires an [app access token](https://dev.twitch.tv/docs/authentication#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication#user-access-tokens).
+      tags:
+        - Users
+      externalDocs:
+        description: Get Users
+        url: https://dev.twitch.tv/docs/api/reference#get-users
+      operationId: get-users
+      parameters:
+        - $ref: '#/components/parameters/TwitchUsernameOrId'
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [ 'login', 'user', 'id' ]
+            description: |
+              The type of query to use. If not specified the API will guess it.
+              `login` and `user` are the same thing.
+      responses:
+        '200':
+          description: Successfully retrieved the specified users’ information.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetUsersResponse"
+              examples:
+                Example:
+                  description: |-
+                    _Request:_
+
+                    Gets information about the specified user.
+
+                    ```bash
+                    curl -X GET 'https://api.awakenedredstone.com/v2/twitch/user/141981764'
+                    ```
+                  value:
+                    data:
+                      - id: '141981764'
+                        login: twitchdev
+                        display_name: TwitchDev
+                        type: ''
+                        broadcaster_type: partner
+                        description: Supporting third-party developers building Twitch integrations
+                          from chatbots to game integrations.
+                        profile_image_url: https://static-cdn.jtvnw.net/jtv_user_pictures/8a6381c7-d0c0-4576-b179-38bd5ce1d6af-profile_image-300x300.png
+                        offline_image_url: https://static-cdn.jtvnw.net/jtv_user_pictures/3f13ab61-ec78-4fe6-8481-8682cb3b0ac2-channel_offline_image-1920x1080.png
+                        view_count: 0
+                        created_at: '2016-12-14T20:32:28Z'
+        '400':
+          description: |-
+            * The _id_ or _login_ query parameter is required unless the request uses a user access token.
+            * The request exceeded the maximum allowed number of _id_ and/or _login_ query parameters.
+        '401':
+          description: |-
+            * The Authorization header is required and must contain an app access token or user access token.
+            * The access token is not valid.
+            * The ID specified in the Client-Id header does not match the client ID specified in the access token.
