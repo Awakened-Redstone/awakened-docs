@@ -1,313 +1,436 @@
-openapi: 3.0.0
-
-info:
-  version: 2.0.0
-  title: Awakened API
-  description: |
-    Awakened Redstone's custom API for their projects and tests.
-
-servers:
-  - url: https://api.awakenedredstone.com/v2
-    description: Production server
-
-components:
-  parameters:
-    TwitchUsernameOrId:
-      name: twitch_username
-      in: path
-      required: true
-      description: The username or ID of the Twitch user
-      schema:
-        oneOf:
-          - type: string
-
-            pattern: '^[a-zA-Z\d]\w{0,24}$'
-            example: [ xemdo, awakenedRedstone, CaptainSparklez ]
-          - type: integer
-            format: int32
-            example: [ 815300980, 125357239, 71092938, 141981764, 1 ]
-
-    TwitchId:
-      name: twitch_id
-      in: path
-      description: The ID of the broadcaster whose chat badges you want to get.
-      required: true
-      schema:
-        type: integer
-        format: int32
-        example: 815300980
-
-  schemas:
-    GetUsersResponse:
-      type: object
-      required:
-        - data
-      properties:
-        data:
-          type: array
-          description: The list of users.
-          items:
-            "$ref": "#/components/schemas/User"
-
-    User:
-      type: object
-      required:
-        - id
-        - login
-        - display_name
-        - type
-        - broadcaster_type
-        - description
-        - profile_image_url
-        - offline_image_url
-        - view_count
-        - created_at
-      properties:
-        id:
-          type: string
-          description: An ID that identifies the user.
-        login:
-          type: string
-          description: The user\'s login name.
-        display_name:
-          type: string
-          description: The user\'s display name.
-        type:
-          type: string
-          description: "The type of user. Possible values are:  \n  \n* admin — Twitch
-            administrator\n* global\\_mod\n* staff — Twitch staff\n* \"\" — Normal user"
-          enum:
-            - admin
-            - global_mod
-            - staff
-            - ''
-        broadcaster_type:
-          type: string
-          description: "The type of broadcaster. Possible values are:  \n  \n* affiliate
-            — An [affiliate broadcaster](https://help.twitch.tv/s/article/joining-the-affiliate-program
-            target=)\n* partner — A [partner broadcaster](https://help.twitch.tv/s/article/partner-program-overview)\n*
-            \"\" — A normal broadcaster"
-          enum:
-            - affiliate
-            - partner
-            - ''
-        description:
-          type: string
-          description: The user\'s description of their channel.
-        profile_image_url:
-          type: string
-          description: A URL to the user\'s profile image.
-        offline_image_url:
-          type: string
-          description: A URL to the user\'s offline image.
-        view_count:
-          type: integer
-          description: "Will always be 0"
-          deprecated: true
-        created_at:
-          type: string
-          description: The UTC date and time that the user\'s account was created. The
-            timestamp is in RFC3339 format.
-          format: date-time
-
-    GetChannelChatBadgesResponse:
-      type: object
-      required:
-        - data
-      properties:
-        data:
-          type: array
-          description: >-
-            The list of chat badges. The list is sorted in ascending order by
-            `set_id`, and within a set, the list is sorted in ascending order by
-            `id`.
-          items:
-            $ref: '#/components/schemas/ChatBadge'
-
-    ChatBadge:
-      type: object
-      required:
-        - set_id
-        - versions
-      properties:
-        set_id:
-          type: string
-          description: >-
-            An ID that identifies this set of chat badges. For example, Bits or
-            Subscriber.
-        versions:
-          type: array
-          description: The list of chat badges in this set.
-          items:
-            type: object
-            required:
-              - id
-              - image_url_1x
-              - image_url_2x
-              - image_url_4x
-              - title
-              - description
-              - click_action
-              - click_url
-            properties:
-              id:
-                type: string
-                description: >-
-                  An ID that identifies this version of the badge. The ID can be any
-                  value. For example, for Bits, the ID is the Bits tier level, but
-                  for World of Warcraft, it could be Alliance or Horde.
-              image_url_1x:
-                type: string
-                description: A URL to the small version (18px x 18px) of the badge.
-              image_url_2x:
-                type: string
-                description: A URL to the medium version (36px x 36px) of the badge.
-              image_url_4x:
-                type: string
-                description: A URL to the large version (72px x 72px) of the badge.
-              title:
-                type: string
-                description: The title of the badge.
-              description:
-                type: string
-                description: The description of the badge.
-              click_action:
-                type: string
-                description: >-
-                  The action to take when clicking on the badge. Set to `null` if no
-                  action is specified.
-              click_url:
-                type: string
-                description: >-
-                  The URL to navigate to when clicking on the badge. Set to `null`
-                  if no URL is specified.
-
-
-paths:
-  # Twitch
-  /twitch/user/{twitch_username}:
-    get:
-      summary: Get information from a channel
-      description: |-
-        Gets information about one Twitch user.  
-        You may look up a user using their user ID or login name\.
-      tags:
-        - Twitch
-      externalDocs:
-        description: Get Users
-        url: https://dev.twitch.tv/docs/api/reference#get-users
-      operationId: get-users
-      parameters:
-        - $ref: '#/components/parameters/TwitchUsernameOrId'
-        - name: type
-          in: query
-          schema:
-            type: string
-            enum: [ 'login', 'user', 'id' ]
-            description: |
-              The type of query to use. If not specified the API will guess it.
-              `login` and `user` are the same thing.
-            required: false
-      responses:
-        '200':
-          description: Successfully retrieved the specified users\' information.
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/GetUsersResponse"
-              examples:
-                Example:
-                  description: |-
-                    _Request:_
-
-                    Gets information about the specified user.
-
-                    ```bash
-                    curl -X GET 'https://api.awakenedredstone.com/v2/twitch/user/141981764'
-                    ```
-                  value:
-                    data:
-                      - id: '141981764'
-                        login: twitchdev
-                        display_name: TwitchDev
-                        type: ''
-                        broadcaster_type: partner
-                        description: Supporting third-party developers building Twitch integrations
-                          from chatbots to game integrations.
-                        profile_image_url: https://static-cdn.jtvnw.net/jtv_user_pictures/8a6381c7-d0c0-4576-b179-38bd5ce1d6af-profile_image-300x300.png
-                        offline_image_url: https://static-cdn.jtvnw.net/jtv_user_pictures/3f13ab61-ec78-4fe6-8481-8682cb3b0ac2-channel_offline_image-1920x1080.png
-                        view_count: 0
-                        created_at: '2016-12-14T20:32:28Z'
-        '404':
-          description: |-
-            * Could not find the specified user.
-
-
-  /twitch/badges/{twitch_id}:
-    get:
-      summary: Get chat badges from a channel
-      description: >-
-        Gets the broadcaster\'s list of custom chat badges. The list is empty if
-        the broadcaster hasn\'t created custom chat badges. For information about
-        custom badges, see [subscriber
-        badges](https://help.twitch.tv/s/article/subscriber-badge-guide) and [Bits
-        badges](https://help.twitch.tv/s/article/custom-bit-badges-guide).
-
-      tags:
-        - Twitch
-      externalDocs:
-        description: Get Channel Chat Badges
-        url: 'https://dev.twitch.tv/docs/api/reference#get-channel-chat-badges'
-      operationId: get-channel-chat-badges
-      parameters:
-        - $ref: '#/components/parameters/TwitchId'
-      responses:
-        '200':
-          description: Successfully retrieved the broadcaster\'s custom chat badges.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetChannelChatBadgesResponse'
-              examples:
-                Example:
-                  description: >-
-                    _Request:_
-
-
-                    Get the list of custom chat badges that the BlueLava Twitch
-                    channel created.
-
-
-                    ```bash
-
-                    curl -X GET 'https://api.awakenedredstone.com/v2/twitch/badges/135093069'
-
-                    ```
-                  value:
-                    data:
-                      - set_id: bits
-                        versions:
-                          - id: '1'
-                            image_url_1x: >-
-                              https://static-cdn.jtvnw.net/badges/v1/743a0f3b-84b3-450b-96a0-503d7f4a9764/1
-                            image_url_2x: >-
-                              https://static-cdn.jtvnw.net/badges/v1/743a0f3b-84b3-450b-96a0-503d7f4a9764/2
-                            image_url_4x: >-
-                              https://static-cdn.jtvnw.net/badges/v1/743a0f3b-84b3-450b-96a0-503d7f4a9764/3
-                            title: cheer 1
-                            description: cheer 1
-                            click_action: visit_url
-                            click_url: 'https://bits.twitch.tv'
-                      - set_id: subscriber
-                        versions:
-                          - id: '0'
-                            image_url_1x: >-
-                              https://static-cdn.jtvnw.net/badges/v1/eb4a8a4c-eacd-4f5e-b9f2-394348310442/1
-                            image_url_2x: >-
-                              https://static-cdn.jtvnw.net/badges/v1/eb4a8a4c-eacd-4f5e-b9f2-394348310442/2
-                            image_url_4x: >-
-                              https://static-cdn.jtvnw.net/badges/v1/eb4a8a4c-eacd-4f5e-b9f2-394348310442/3
-                            title: Subscriber
-                            description: Subscriber
-                            click_action: subscribe_to_channel
-                            click_url: null
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "2.2.0",
+    "title": "Awakened API",
+    "description": "Awakened Redstone's custom API for their projects and tests.\n"
+  },
+  "servers": [
+    {
+      "url": "https://api.awakenedredstone.com/v2",
+      "description": "Production server"
+    }
+  ],
+  "components": {
+    "parameters": {
+      "TwitchUsernameOrId": {
+        "name": "twitch_username",
+        "in": "path",
+        "required": true,
+        "description": "The username or ID of the Twitch user",
+        "schema": {
+          "oneOf": [
+            {
+              "type": ["string"],
+              "pattern": "^[a-zA-Z\\d]\\w{0,24}$",
+              "example": [
+                "xemdo",
+                "awakenedRedstone",
+                "CaptainSparklez"
+              ]
+            },
+            {
+              "type": ["integer"],
+              "format": "int32",
+              "example": [
+                815300980,
+                125357239,
+                71092938,
+                141981764,
+                1
+              ]
+            }
+          ]
+        }
+      },
+      "TwitchId": {
+        "name": "twitch_id",
+        "in": "path",
+        "description": "The ID of the broadcaster whose chat badges you want to get.",
+        "required": true,
+        "schema": {
+          "type": ["integer"],
+          "format": "int32",
+          "example": 815300980
+        }
+      }
+    },
+    "schemas": {
+      "GetUsersResponse": {
+        "type": ["object"],
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": ["array"],
+            "description": "The list of users.",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "User": {
+        "type": ["object"],
+        "required": [
+          "id",
+          "login",
+          "display_name",
+          "type",
+          "broadcaster_type",
+          "description",
+          "profile_image_url",
+          "offline_image_url",
+          "view_count",
+          "created_at"
+        ],
+        "properties": {
+          "id": {
+            "type": ["string"],
+            "description": "An ID that identifies the user."
+          },
+          "login": {
+            "type": ["string"],
+            "description": "The user\\'s login name."
+          },
+          "display_name": {
+            "type": ["string"],
+            "description": "The user\\'s display name."
+          },
+          "type": {
+            "type": ["string"],
+            "description": "The type of user. Possible values are:  \n  \n* admin — Twitch\nadministrator\n* global\\_mod\n* staff — Twitch staff\n* \"\" — Normal user",
+            "enum": [
+              "admin",
+              "global_mod",
+              "staff",
+              ""
+            ]
+          },
+          "broadcaster_type": {
+            "type": ["string"],
+            "description": "The type of broadcaster. Possible values are:  \n  \n* affiliate\n— An [affiliate broadcaster](https://help.twitch.tv/s/article/joining-the-affiliate-program\ntarget=)\n* partner — A [partner broadcaster](https://help.twitch.tv/s/article/partner-program-overview)\n*\n\"\" — A normal broadcaster",
+            "enum": [
+              "affiliate",
+              "partner",
+              ""
+            ]
+          },
+          "description": {
+            "type": ["string"],
+            "description": "The user\\'s description of their channel."
+          },
+          "profile_image_url": {
+            "type": ["string"],
+            "description": "A URL to the user\\'s profile image."
+          },
+          "offline_image_url": {
+            "type": ["string"],
+            "description": "A URL to the user\\'s offline image."
+          },
+          "view_count": {
+            "type": ["integer"],
+            "description": "Will always be 0",
+            "deprecated": true
+          },
+          "created_at": {
+            "type": ["string"],
+            "description": "The UTC date and time that the user\\'s account was created. The\ntimestamp is in RFC3339 format.",
+            "format": "date-time"
+          }
+        }
+      },
+      "GetChannelChatBadgesResponse": {
+        "type": ["object"],
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "type": ["array"],
+            "description": "The list of chat badges. The list is sorted in ascending order by `set_id`, and within a set, the list is sorted in ascending order by `id`.",
+            "items": {
+              "$ref": "#/components/schemas/ChatBadge"
+            }
+          }
+        }
+      },
+      "ChatBadge": {
+        "type": ["object"],
+        "required": [
+          "set_id",
+          "versions"
+        ],
+        "properties": {
+          "set_id": {
+            "type": ["string"],
+            "description": "An ID that identifies this set of chat badges. For example, Bits or Subscriber."
+          },
+          "versions": {
+            "type": ["array"],
+            "description": "The list of chat badges in this set.",
+            "items": {
+              "type": ["object"],
+              "required": [
+                "id",
+                "image_url_1x",
+                "image_url_2x",
+                "image_url_4x",
+                "title",
+                "description",
+                "click_action",
+                "click_url"
+              ],
+              "properties": {
+                "id": {
+                  "type": ["string"],
+                  "description": "An ID that identifies this version of the badge. The ID can be any value. For example, for Bits, the ID is the Bits tier level, but for World of Warcraft, it could be Alliance or Horde."
+                },
+                "image_url_1x": {
+                  "type": ["string"],
+                  "description": "A URL to the small version (18px x 18px) of the badge."
+                },
+                "image_url_2x": {
+                  "type": ["string"],
+                  "description": "A URL to the medium version (36px x 36px) of the badge."
+                },
+                "image_url_4x": {
+                  "type": ["string"],
+                  "description": "A URL to the large version (72px x 72px) of the badge."
+                },
+                "title": {
+                  "type": ["string"],
+                  "description": "The title of the badge."
+                },
+                "description": {
+                  "type": ["string"],
+                  "description": "The description of the badge."
+                },
+                "click_action": {
+                  "type": ["string"],
+                  "description": "The action to take when clicking on the badge. Set to `null` if no action is specified."
+                },
+                "click_url": {
+                  "type": ["string"],
+                  "description": "The URL to navigate to when clicking on the badge. Set to `null` if no URL is specified."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/post": {
+      "post": {
+        "summary": "POST test endpoint",
+        "description": "An endpoint for testing if the application has proper internet \nconnection and can do POST requests. Any data sent to it is discarded.",
+        "tags": [
+          "Test"
+        ],
+        "responses": {
+          "200": {
+            "description": "The data has been received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": ["object"],
+                  "properties": {
+                    "data": {
+                      "type": ["string"],
+                      "const": "Received!"
+                    }
+                  }
+                },
+                "examples": {
+                  "Example": {
+                    "description": "_Request:_\n\nSend a message to the endpoint\n\n```bash\ncurl -X POST 'https://api.awakenedredstone.com/v2/post/'\n```",
+                    "value": {
+                      "data": "Received!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/helloworld": {
+      "get": {
+        "summary": "GET test endpoint",
+        "description": "Hello world! An endpoint for testing if the application has proper \ninternet connection and can do GET requests. Any data sent to it is discarded.",
+        "tags": [
+          "Test"
+        ],
+        "responses": {
+          "200": {
+            "description": "Hello world!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": ["object"],
+                  "properties": {
+                    "data": {
+                      "type": ["string"],
+                      "const": "Hello world!"
+                    }
+                  }
+                },
+                "examples": {
+                  "Example": {
+                    "description": "_Request:_\n\nSend a message to the endpoint\n\n```bash\ncurl -X GET 'https://api.awakenedredstone.com/v2/helloworld/'\n```",
+                    "value": {
+                      "data": "Hello world!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/twitch/user/{twitch_username}": {
+      "get": {
+        "summary": "Get information from a channel",
+        "description": "Gets information about one Twitch user.  \nYou may look up a user using their user ID or login name\\.",
+        "tags": [
+          "Twitch"
+        ],
+        "externalDocs": {
+          "description": "Get Users",
+          "url": "https://dev.twitch.tv/docs/api/reference#get-users"
+        },
+        "operationId": "get-users",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TwitchUsernameOrId"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": ["string"],
+              "enum": [
+                "login",
+                "user",
+                "id"
+              ],
+              "description": "The type of query to use. If not specified the API will guess it.\n`login` and `user` are the same thing.\n",
+              "required": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the specified users\\' information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUsersResponse"
+                },
+                "examples": {
+                  "Example": {
+                    "description": "_Request:_\n\nGets information about the specified user.\n\n```bash\ncurl -X GET 'https://api.awakenedredstone.com/v2/twitch/user/141981764'\n```",
+                    "value": {
+                      "data": [
+                        {
+                          "id": "141981764",
+                          "login": "twitchdev",
+                          "display_name": "TwitchDev",
+                          "type": "",
+                          "broadcaster_type": "partner",
+                          "description": "Supporting third-party developers building Twitch integrations\nfrom chatbots to game integrations.",
+                          "profile_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/8a6381c7-d0c0-4576-b179-38bd5ce1d6af-profile_image-300x300.png",
+                          "offline_image_url": "https://static-cdn.jtvnw.net/jtv_user_pictures/3f13ab61-ec78-4fe6-8481-8682cb3b0ac2-channel_offline_image-1920x1080.png",
+                          "view_count": 0,
+                          "created_at": "2016-12-14T20:32:28Z"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "* Could not find the specified user."
+          }
+        }
+      }
+    },
+    "/twitch/badges/{twitch_id}": {
+      "get": {
+        "summary": "Get chat badges from a channel",
+        "description": "Gets the broadcaster\\'s list of custom chat badges. The list is empty if the broadcaster hasn\\'t created custom chat badges. For information about custom badges, see [subscriber badges](https://help.twitch.tv/s/article/subscriber-badge-guide) and [Bits badges](https://help.twitch.tv/s/article/custom-bit-badges-guide).",
+        "tags": [
+          "Twitch"
+        ],
+        "externalDocs": {
+          "description": "Get Channel Chat Badges",
+          "url": "https://dev.twitch.tv/docs/api/reference#get-channel-chat-badges"
+        },
+        "operationId": "get-channel-chat-badges",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TwitchId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the broadcaster\\'s custom chat badges.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetChannelChatBadgesResponse"
+                },
+                "examples": {
+                  "Example": {
+                    "description": "_Request:_\n\nGet the list of custom chat badges that the BlueLava Twitch channel created.\n\n```bash\ncurl -X GET 'https://api.awakenedredstone.com/v2/twitch/badges/135093069'\n```",
+                    "value": {
+                      "data": [
+                        {
+                          "set_id": "bits",
+                          "versions": [
+                            {
+                              "id": "1",
+                              "image_url_1x": "https://static-cdn.jtvnw.net/badges/v1/743a0f3b-84b3-450b-96a0-503d7f4a9764/1",
+                              "image_url_2x": "https://static-cdn.jtvnw.net/badges/v1/743a0f3b-84b3-450b-96a0-503d7f4a9764/2",
+                              "image_url_4x": "https://static-cdn.jtvnw.net/badges/v1/743a0f3b-84b3-450b-96a0-503d7f4a9764/3",
+                              "title": "cheer 1",
+                              "description": "cheer 1",
+                              "click_action": "visit_url",
+                              "click_url": "https://bits.twitch.tv"
+                            }
+                          ]
+                        },
+                        {
+                          "set_id": "subscriber",
+                          "versions": [
+                            {
+                              "id": "0",
+                              "image_url_1x": "https://static-cdn.jtvnw.net/badges/v1/eb4a8a4c-eacd-4f5e-b9f2-394348310442/1",
+                              "image_url_2x": "https://static-cdn.jtvnw.net/badges/v1/eb4a8a4c-eacd-4f5e-b9f2-394348310442/2",
+                              "image_url_4x": "https://static-cdn.jtvnw.net/badges/v1/eb4a8a4c-eacd-4f5e-b9f2-394348310442/3",
+                              "title": "Subscriber",
+                              "description": "Subscriber",
+                              "click_action": "subscribe_to_channel",
+                              "click_url": null
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

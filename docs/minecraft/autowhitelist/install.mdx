@@ -3,6 +3,7 @@ import Admonition from '@theme/Admonition'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import {Spoiler} from "../../../src/components/spoiler";
+import CodeBlock from "@docusaurus/theme-classic/lib/theme/CodeBlock";
 
 # Installing
 
@@ -10,11 +11,8 @@ import {Spoiler} from "../../../src/components/spoiler";
     Basic JSON or JSON5 knowledge is highly recommended.
 </Admonition>
 
-```json5
-{
-    test: "test"
-}
-```
+<CodeBlock language={"js"} children={"const a = \"test\";"}>
+</CodeBlock>
 
 <Admonition type={"caution"}>
     Some Discord integration mods use a different version of JDA (the library used to interact with Discord), this may cause issues or failures.
