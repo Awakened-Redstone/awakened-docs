@@ -1,0 +1,25 @@
+---
+title: Migrating from Lite to Full
+sidebar_position: 3
+---
+
+First thing you should know is that the config file moved from `config/autowhitelist/autowhitelist.json` to `config/autowhitelist.json5`
+
+There were also changes to the names on the config values on AuthoWhitelist (Full), those changes will be ported to AutoWhitelist Lite in the future. But for now you need to know what value goes where.
+
+I recommend opening both files in your editor of choice, so you can easily copy-paste the values.
+
+The table below shows the name of the values that differ between the versions.
+
+| Lite                                  | Full         |
+|---------------------------------------|--------------|
+| whitelistScheduledVerificationSeconds | updatePeriod |
+| owners                                | admins       |
+| whitelist                             | entries      |
+
+Please note that the `entries` structure is completely different between the versions, so you will have to redo it.
+Check the [Installing](/docs/minecraft/autowhitelist/install#configuring-the-mod)
+(`Setting the entries` section) page for more information on how to do it.
+
+The rest of the values that aren't on the table can be safely copied.
+AutoWhitelist (Full) contains more options than the lite version, each option is commented on what they do.

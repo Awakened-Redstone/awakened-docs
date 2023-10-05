@@ -1,0 +1,39 @@
+import {OnlineCode} from "../../../../src/components/OnlineCode";import CodeBlock from "@docusaurus/theme-classic/lib/theme/CodeBlock";
+
+### Basic JSON understanding is highly recommended
+
+Customizing the messages is pretty simple.
+
+# Lite
+For the lite version head over to `config/autowhitelist/messages.json`  
+To apply the changes run `/autowhitelist reload translations`
+
+# Full
+For the full version you need to create a datapack
+
+To create the datapack you must head to you world folder, than to `datapacks`
+There you create a folder with the name of your choice
+Inside the folder create a `pack.mcmeta` file and an `autowhitelist` folder
+On `pack.mcmeta` put the following:
+```json
+{
+    "pack": {
+        "description": "Custom messages for AutoWhitelist",
+        "pack_format": 10        
+    }
+}
+``` 
+Feel free to customize the `description` content
+
+Inside the `autowhiteist` folder create a `lang` folder
+
+Now inside the `lang` folder you created create a new file called `en_us.json`
+On that file you will customize the mod messages.
+
+You DON'T need to include all translations, only the ones you want to change.
+
+You also will want to run `/datapack enable <your datapack>`
+If you have the datapack enabled make sure to run `/reload` to update the translations
+
+#### The data below is automatically gathered from the repository
+<OnlineCode title={"Default translations"} lang={"json"} src={"https://raw.githubusercontent.com/Awakened-Redstone/AutoWhitelist/dev/full/src/main/resources/data/autowhitelist/lang/en_us.json"}/>

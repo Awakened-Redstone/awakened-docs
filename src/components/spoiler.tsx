@@ -9,7 +9,7 @@ import React, {
     useState
 } from "react";
 import cn from "clsx";
-import {DetailsProvider, useDetails} from "@site/src/components/context/details";
+import {DetailsProvider, useDetails} from "./context/details";
 
 const findSummary = (children: ReactNode) => {
     let summary: ReactNode = null
@@ -120,7 +120,7 @@ function Collapse({children, className, isOpen, horizontal = false}: {
         if (initialRender.current || !container || !inner) return
 
         container.classList.toggle('duration-500', !isOpen)
-        container.classList.toggle('duration-100', isOpen)
+        container.classList.toggle('duration-200', isOpen)
 
         if (horizontal) {
             // save initial width to avoid word wrapping when container width will be changed
@@ -133,8 +133,13 @@ function Collapse({children, className, isOpen, horizontal = false}: {
         if (isOpen) {
             animationRef.current = window.setTimeout(() => {
                 // should be style property in kebab-case, not css class name
-                container.style.height = `${inner.clientHeight}px`
+                container.style.height = `calc(${inner.clientHeight}px + var(--ifm-paragraph-margin-bottom))`
             }, 250)
+
+            animationRef.current = window.setTimeout(() => {
+                // should be style property in kebab-case, not css class name
+                container.style.removeProperty('height')
+            }, 250 + 500)
         } else {
             setTimeout(() => {
                 if (horizontal) {

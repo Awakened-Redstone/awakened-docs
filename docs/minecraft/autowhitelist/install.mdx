@@ -1,18 +1,24 @@
+---
+sidebar_position: 2
+---
+
 import {Steps} from "../../../src/components/steps";
 import Admonition from '@theme/Admonition'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import {Spoiler} from "../../../src/components/spoiler";
 import CodeBlock from "@docusaurus/theme-classic/lib/theme/CodeBlock";
+import {LazyImage} from "../../../src/components/lazyImage";
 
 # Installing
+
+One sentence. Two sentences.
+
+One sentence.  Two sentences.
 
 <Admonition type={"info"}>
     Basic JSON or JSON5 knowledge is highly recommended.
 </Admonition>
-
-<CodeBlock language={"js"} children={"const a = \"test\";"}>
-</CodeBlock>
 
 <Admonition type={"caution"}>
     Some Discord integration mods use a different version of JDA (the library used to interact with Discord), this may cause issues or failures.
@@ -33,27 +39,26 @@ import CodeBlock from "@docusaurus/theme-classic/lib/theme/CodeBlock";
 
     ### Setting up the Discord bot
     <Spoiler title={"Creating the bot"}>
-        ![Creating the bot gif](https://raw.githubusercontent.com/Awakened-Redstone/Awakened-Redstone/master/assets/images/autowhitelist/create_bot_v2.gif)
+      <LazyImage src={"https://raw.githubusercontent.com/Awakened-Redstone/Awakened-Redstone/master/assets/images/autowhitelist/create_bot_v2.gif"} alt={"Creating the bot gif"}/>
     </Spoiler>
 
     <Spoiler title={"Important settings"}>
-
-        ![Important settings gif](https://raw.githubusercontent.com/Awakened-Redstone/Awakened-Redstone/master/assets/images/autowhitelist/bot_settings_v2.gif)
+      <LazyImage src={"https://raw.githubusercontent.com/Awakened-Redstone/Awakened-Redstone/master/assets/images/autowhitelist/bot_settings_v2.gif"} alt={"Important settings gif"}/>
     </Spoiler>
 
     <Spoiler title={"Getting the token"}>
 
-        ![Getting the token](https://cdn.glitch.global/b4fe08b2-a216-4ca6-a836-38b072b573c1/Screenshot_1403.png)
+        <LazyImage src={"https://cdn.glitch.global/b4fe08b2-a216-4ca6-a836-38b072b573c1/Screenshot_1403.png"} alt={"Getting the token"}/>
     </Spoiler>
 
     <Spoiler title={"Getting the client ID"}>
 
-        ![Getting ClientId](https://cdn.glitch.global/b4fe08b2-a216-4ca6-a836-38b072b573c1/Screenshot_1405.png)
+        <LazyImage src={"https://cdn.glitch.global/b4fe08b2-a216-4ca6-a836-38b072b573c1/Screenshot_1405.png"} alt={"Getting ClientId"}/>
     </Spoiler>
 
     <Spoiler title={"Adding to your server"}>
 
-        ![Adding to your server gif](https://github.com/Awakened-Redstone/Awakened-Redstone/blob/master/assets/images/autowhitelist/adding_bot.gif?raw=true)
+        <LazyImage src={"https://github.com/Awakened-Redstone/Awakened-Redstone/blob/master/assets/images/autowhitelist/adding_bot.gif?raw=true"} alt={"Adding to your server gif"}/>
     </Spoiler>
 
     ### Configuring the mod
@@ -78,11 +83,10 @@ import CodeBlock from "@docusaurus/theme-classic/lib/theme/CodeBlock";
         </Admonition>
         Paste the client ID you got from the bot page into the `clientId` entry in the config.<br/>
         To get the server ID you need to right click the server icon and click `Copy Server ID`.
-        ```json5
+        ```json5 {5-6}
         {
             ...
             // Your bot token. Never share it, anyone with it has full control of the bot
-            // highlight-next-line
             "token": "NEVER SHARE YOUR BOT TOKEN",
             "clientId": "937880657697308682",
             "discordServerId": "894529860145920118",
@@ -141,22 +145,22 @@ import CodeBlock from "@docusaurus/theme-classic/lib/theme/CodeBlock";
 
             <Tabs>
                 <TabItem value="group" label="Group" default>
-                    ```json5 copy
-                    {
-                        "roleIds": ["Discord role id"],
-                        "type": "LUCKPERMS_GROUP",
-                        "group": "TIER_1"
-                    }
-                    ```
+                  ```json5 copy
+                  {
+                    "roleIds": ["Discord role id"],
+                    "type": "LUCKPERMS_GROUP",
+                    "group": "TIER_1"
+                  }
+                  ```
                 </TabItem>
                 <TabItem value="permission" label="Permission">
-                    ```json5 copy
-                    {
-                        "roleIds": ["Discord role id"],
-                        "type": "LUCKPERMS_PERMISSION",
-                        "permission": "minecraft.command.teleport"
-                    }
-                    ```
+                  ```json5 copy
+                  {
+                    "roleIds": ["Discord role id"],
+                    "type": "LUCKPERMS_PERMISSION",
+                    "permission": "minecraft.command.teleport"
+                  }
+                  ```
                 </TabItem>
             </Tabs>
         </Spoiler>
