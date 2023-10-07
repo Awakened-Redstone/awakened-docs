@@ -11,7 +11,8 @@ const makePrimaryColor = l => ({opacityValue}) => {
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
-    "./docs/**/*.{js,jsx,ts,tsx,md,mdx}"
+    "./docs/**/*.{js,jsx,ts,tsx,md,mdx}",
+    "./minecraft/**/*.{js,jsx,ts,tsx,md,mdx}",
   ],
   darkMode: ['class', '[data-theme="dark"]'],
   theme: {

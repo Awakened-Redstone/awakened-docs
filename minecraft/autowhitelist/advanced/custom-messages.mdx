@@ -1,0 +1,43 @@
+---
+title: Custom messages
+---
+
+import {OnlineCode} from "../../../src/components/OnlineCode";
+
+:::tip Recommendation
+  Basic JSON knowledge is highly recommended
+:::
+
+To customize the messages you need to create a datapack
+
+To create the datapack you must head to you world folder, then to `datapacks`
+There you create a folder with the name of your choice
+Inside the folder create a `pack.mcmeta` file and an `autowhitelist` folder
+
+On `pack.mcmeta` put the following:
+```json title="pack.mcmeta"
+{
+    "pack": {
+        "description": "Custom messages for AutoWhitelist",
+        "pack_format": 10        
+    }
+}
+``` 
+Feel free to customize the `description` content
+
+Inside the `autowhiteist` folder create a folder called `lang`
+
+Now inside the `lang` folder create a new file called `en_us.json`<br/>
+On that file you will customize the mod messages.
+
+:::tip
+  You don't need to include all translations, only the ones you want to change.
+:::
+
+You will also want to run `/datapack enable <your datapack>` <br/>
+If you already have the datapack enabled make sure to run `/reload` to update the translations
+
+:::danger
+  The data below is automatically gathered from the repository, it will always show the values of the latest version!
+:::
+<OnlineCode title={"en_us.json"} lang={"json"} src={"https://raw.githubusercontent.com/Awakened-Redstone/AutoWhitelist/dev/full/src/main/resources/data/autowhitelist/lang/en_us.json"}/>

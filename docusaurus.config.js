@@ -42,44 +42,55 @@ module.exports = async function createConfigAsync() {
         /** @type {import('@docusaurus/preset-classic').Options} */
         ({
           docs: {
-            sidebarPath: require.resolve('./sidebars.js'),
+            sidebarPath: require.resolve('./sidebars/default.js'),
             // Please change this to your repo.
             // Remove this to remove the "edit this page" links.
             editUrl:
-              'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+              'https://github.com/Awakened-Redstone/awakened-docs/tree/main/',
           },
           theme: {
             customCss: require.resolve('./src/css/custom.css'),
           },
         }),
       ],
-      /*[
-        '@docusaurus/preset-classic',
-        {
-          docs: {
-
-          },
-        },
-      ],*/
-      /*[
-        'redocusaurus',
-        {
-          // Plugin Options for loading OpenAPI files
-          specs: [
-            {
-              spec: './static/openapi.yaml',
-              route: '/api/',
-            },
-          ],
-          // Theme Options for modifying how redoc renders them
-          theme: {
-            // Change with your site colors
-            primaryColor: '#1890ff',
-          },
-        }
-      ]*/
     ],
-    //themes: ["mdx-v2"],
+    plugins: [
+      [
+        'content-docs',
+        /** @type {import('@docusaurus/plugin-content-docs').Options} */
+        ({
+          id: 'autowhitelist',
+          path: 'minecraft/autowhitelist',
+          routeBasePath: 'minecraft/autowhitelist',
+          sidebarPath: require.resolve('./sidebars/autowhitelist.js'),
+          editCurrentVersion: true,
+          // ... other options
+        }),
+      ],
+      [
+        'content-docs',
+        /** @type {import('@docusaurus/plugin-content-docs').Options} */
+        ({
+          id: 'autowhitelist-lite',
+          path: 'minecraft/autowhitelist-lite',
+          routeBasePath: 'minecraft/autowhitelist-lite',
+          sidebarPath: require.resolve('./sidebars/autowhitelist-lite.js'),
+          editCurrentVersion: true,
+          // ... other options
+        }),
+      ],
+      async function tailwind(context, options) {
+        return {
+          name: "docusaurus-tailwindcss",
+          configurePostCss(postcssOptions) {
+            // Appends TailwindCSS and AutoPrefixer.
+            postcssOptions.plugins.push(require("tailwindcss"));
+            postcssOptions.plugins.push(require("autoprefixer"));
+            return postcssOptions;
+          },
+        };
+      },
+    ],
 
     themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
@@ -99,9 +110,14 @@ module.exports = async function createConfigAsync() {
               position: 'left',
               items: [
                 {
-                  type: 'docSidebar',
-                  sidebarId: 'autoWhitelistSidebar',
+                  to: '/minecraft/autowhitelist/introduction',
                   label: 'Auto Whitelist',
+                  activeBaseRegex: `/minecraft\\/autowhitelist/`,
+                },
+                {
+                  to: '/minecraft/autowhitelist-lite/introduction',
+                  label: 'Auto Whitelist Lite',
+                  activeBaseRegex: `/minecraft\\/autowhitelist\\-lite/`,
                 },
               ]
             },
@@ -111,7 +127,7 @@ module.exports = async function createConfigAsync() {
               position: 'left',
               label: 'Tutorial',
             },
-            {to: '/api', label: 'API', position: 'left'},
+            /*{to: '/api', label: 'API', position: 'left'},*/
             {
               href: 'https://github.com/Awakened-Redstone/awakened-docs',
               label: 'GitHub',
@@ -174,20 +190,6 @@ module.exports = async function createConfigAsync() {
           disableSwitch: false,
           respectPrefersColorScheme: true,
         },
-      }),
-
-    plugins: [
-      async function tailwind(context, options) {
-        return {
-          name: "docusaurus-tailwindcss",
-          configurePostCss(postcssOptions) {
-            // Appends TailwindCSS and AutoPrefixer.
-            postcssOptions.plugins.push(require("tailwindcss"));
-            postcssOptions.plugins.push(require("autoprefixer"));
-            return postcssOptions;
-          },
-        };
-      },
-    ]
+      })
   };
 };
