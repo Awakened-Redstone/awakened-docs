@@ -1,0 +1,38 @@
+---
+title: Entry Lock
+sidebar_position: 3
+---
+
+<div className={"tw-flex"}>
+  <div className={"tw-w-full"}>
+    ## Time format
+
+    | Symbol | Time Unit |
+    |:------:|:---------:|
+    |  `y`   |   Years   |
+    |  `M`   |  Months   |
+    |  `w`   |   Weeks   |
+    |  `d`   |   Days    |
+    |  `h`   |   Hours   |
+    |  `m`   |  Minutes  |
+    |  `s`   |  Seconds  |
+
+    Example: <br/>
+    `1M3w2d5h` means 1 month, 3 weeks, 2 days and 5 hours <br/>
+    `1M 3w 2d 5h` is also valid
+
+    **Spaces and other invalid characters are ignored**
+  </div>
+  <div className={"tw-w-full tw-border-l tw-border-solid tw-border-button-dark tw-pl-4"}>
+    ## Possible values
+
+    |    Symbol    |             Effect             |
+    |:------------:|:------------------------------:|
+    |     `-1`     |            Infinite            |
+    |     `0`      |            Disabled            |
+    | `<timeunit>` | Calculated time<br/>from above |
+
+    Setting the lock to `-1` will make it infinite, <br/>
+    Setting it to `0` will disable it
+  </div>
+</div>

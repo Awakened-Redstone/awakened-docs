@@ -70,7 +70,7 @@ const Details = ({children, open, ...props}: ComponentProps<'details'>): ReactEl
 
     return (
         <details
-            className="my-4 rounded border border-gray-200 bg-white p-2 shadow-sm first:mt-0 dark:border-neutral-800 dark:bg-neutral-900 border-solid"
+            className="tw-my-4 tw-rounded tw-border tw-border-gray-200 tw-bg-white tw-p-2 tw-shadow-sm tw-first:mt-0 dark:tw-border-neutral-800 dark:tw-bg-neutral-900 tw-border-solid"
             {...props}
             open={delayedOpenState}
             {...(openState && {'data-expanded': true})}
@@ -85,9 +85,9 @@ const Summary = (props: ComponentProps<'summary'>): ReactElement => {
     const setOpen = useDetails()
     return (
         <summary
-            className={"flex items-center cursor-pointer list-none p-1 transition-colors hover:bg-gray-100 dark:hover:bg-neutral-800 " +
-                "before:mr-1 before:inline-block before:transition-transform before:content-[''] dark:before:invert " +
-                "before:shrink-0 rtl:before:rotate-180 [[data-expanded]>&]:before:rotate-90"
+            className={"tw-flex tw-items-center tw-cursor-pointer tw-list-none tw-p-1 tw-transition-colors hover:tw-bg-gray-100 dark:hover:tw-bg-neutral-800 " +
+                "before:tw-mr-1 before:tw-inline-block before:tw-transition-transform before:tw-content-[''] dark:before:tw-invert " +
+                "before:tw-shrink-0 rtl:before:tw-rotate-180 [[data-expanded]>&]:before:tw-rotate-90"
             }
             {...props}
             onClick={e => {
@@ -119,8 +119,8 @@ function Collapse({children, className, isOpen, horizontal = false}: {
         }
         if (initialRender.current || !container || !inner) return
 
-        container.classList.toggle('duration-500', !isOpen)
-        container.classList.toggle('duration-200', isOpen)
+        container.classList.toggle('tw-duration-500', !isOpen)
+        container.classList.toggle('tw-duration-200', isOpen)
 
         if (horizontal) {
             // save initial width to avoid word wrapping when container width will be changed
@@ -133,13 +133,13 @@ function Collapse({children, className, isOpen, horizontal = false}: {
         if (isOpen) {
             animationRef.current = window.setTimeout(() => {
                 // should be style property in kebab-case, not css class name
-                container.style.height = `calc(${inner.clientHeight}px + var(--ifm-paragraph-margin-bottom))`
-            }, 250)
+                container.style.height = `${inner.clientHeight}px`
+            }, 0)
 
-            animationRef.current = window.setTimeout(() => {
+            /*animationRef.current = window.setTimeout(() => {
                 // should be style property in kebab-case, not css class name
                 container.style.removeProperty('height')
-            }, 250 + 500)
+            }, 500)*/
         } else {
             setTimeout(() => {
                 if (horizontal) {
@@ -158,18 +158,18 @@ function Collapse({children, className, isOpen, horizontal = false}: {
     return (
         <div
             ref={containerRef}
-            className="transform-gpu overflow-hidden transition-all ease-in-out motion-reduce:transition-none"
+            className="tw-transform-gpu tw-overflow-hidden tw-transition-all tw-ease-in-out tw-motion-reduce:transition-none"
             style={initialOpen.current || horizontal ? undefined : {height: 0}}
         >
             <div
                 ref={innerRef}
                 className={cn(
-                    'transition-all duration-500 ease-in-out motion-reduce:transition-none',
-                    isOpen ? 'opacity-100' : 'opacity-0',
+                    'tw-transition-all tw-duration-500 tw-ease-in-out tw-motion-reduce:transition-none',
+                    isOpen ? 'tw-opacity-100' : 'tw-opacity-0',
                     className
                 )}
             >
-                <div className={"pb-2"}></div>
+                <div className={"tw-pb-2"}></div>
                 {children}
             </div>
         </div>

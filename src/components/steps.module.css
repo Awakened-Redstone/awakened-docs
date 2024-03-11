@@ -3,10 +3,10 @@
 }
 
 .nextraSteps h3:before {
-  @apply absolute w-[33px] h-[33px];
-  @apply flex items-center justify-center;
-  @apply border-4 border-white bg-gray-100 dark:border-dark dark:bg-neutral-800;
-  @apply rounded-full text-neutral-400 text-base font-normal text-center -indent-px;
-  @apply mt-[3px] ml-[-41px];
+  @apply tw-absolute tw-w-[33px] tw-h-[33px];
+  @apply tw-flex tw-items-center tw-justify-center;
+  @apply tw-border-4 tw-border-white tw-bg-gray-100 dark:tw-border-dark dark:tw-bg-neutral-800;
+  @apply tw-rounded-full tw-text-neutral-400 tw-text-base tw-font-normal tw-text-center tw--indent-px;
+  @apply tw-mt-[-2px] tw-ml-[-41px];
   content: counter(step);
 }

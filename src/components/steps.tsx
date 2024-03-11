@@ -7,8 +7,8 @@ export function Steps({children, className, ...props}: ComponentProps<'div'>): R
     return (
         <div
             className={cn(
-                `${styles.nextraSteps} ml-4 mb-12 border-l border-gray-200 pl-6`,
-                'border-solid dark:border-neutral-800 [counter-reset:step]',
+                `${styles.nextraSteps} tw-ml-4 tw-mb-12 tw-border-0 tw-border-l tw-border-gray-200 tw-pl-6`,
+                'tw-border-solid dark:tw-border-neutral-800 [counter-reset:step]',
                 className
             )}
             {...props}

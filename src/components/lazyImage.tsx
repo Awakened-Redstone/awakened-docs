@@ -33,9 +33,9 @@ export function LazyImage({src, alt, ...props}: ComponentProps<'img'>): ReactEle
                 onLoad={onLoad}
                 onError={onError}
                 className={clsx(
-                    'transition-opacity',
-                    loaded && 'opacity-100',
-                    error && 'opacity-0'
+                    'tw-transition-opacity',
+                    loaded && 'tw-opacity-100',
+                    error && 'tw-opacity-0'
                 )}
             />
         </>

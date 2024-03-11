@@ -1,0 +1,301 @@
+---
+sidebar_position: 2
+---
+
+import {useEffect, useState} from "react";
+import { Check, ChevronsUpDown } from "lucide-react"
+import { cn } from "@site/src/lib/utils"
+import Admonition from '@theme/Admonition'
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import {Steps} from "@site/src/components/steps";
+import {Spoiler} from "@site/src/components/spoiler";
+import {LazyImage} from "@site/src/components/lazyImage";
+import {Button} from "@site/src/components/ui/button";
+import {Popover, PopoverContent, PopoverTrigger} from "@site/src/components/ui/popover";
+import {Command, CommandInput, CommandEmpty, CommandGroup, CommandItem} from "@site/src/components/ui/command";
+
+# Installing
+
+:::tip Recommendation
+  Basic JSON or JSON5 knowledge is highly recommended.
+:::
+:::danger Watch out!
+Some Discord integration mods use a different version of JDA (the library used to interact with Discord), this may cause issues or failures.
+:::
+
+<Steps>
+  ### Installing the mod
+  :::info
+  Make sure you download the correct version for your server's Minecraft version.
+  :::
+
+[//]: # (Dropdown to select a minecraft version)
+
+  <VersionPicker/>
+
+  ### Setting up the Discord bot
+
+  <Spoiler title={"Creating the bot"}>
+    <LazyImage
+      src={"https://raw.githubusercontent.com/Awakened-Redstone/Awakened-Redstone/master/assets/images/autowhitelist/create_bot_v2.gif"}
+      alt={"Creating the bot gif"}/>
+  </Spoiler>
+
+  <Spoiler title={"Important settings"}>
+    <LazyImage
+      src={"https://raw.githubusercontent.com/Awakened-Redstone/Awakened-Redstone/master/assets/images/autowhitelist/bot_settings_v2.gif"}
+      alt={"Important settings gif"}/>
+  </Spoiler>
+
+  <Spoiler title={"Getting the token"}>
+
+    <LazyImage src={"https://cdn.glitch.global/b4fe08b2-a216-4ca6-a836-38b072b573c1/Screenshot_1403.png"}
+               alt={"Getting the token"}/>
+  </Spoiler>
+
+  <Spoiler title={"Getting the client ID"}>
+
+    <LazyImage src={"https://cdn.glitch.global/b4fe08b2-a216-4ca6-a836-38b072b573c1/Screenshot_1405.png"}
+               alt={"Getting ClientId"}/>
+  </Spoiler>
+
+  <Spoiler title={"Adding to your server"}>
+
+    <LazyImage
+      src={"https://github.com/Awakened-Redstone/Awakened-Redstone/blob/master/assets/images/autowhitelist/adding_bot.gif?raw=true"}
+      alt={"Adding to your server gif"}/>
+  </Spoiler>
+
+  ### Configuring the mod
+
+  <Spoiler title={"Adding the bot token"}>
+    ```json5 {5}
+    {
+      "prefix": "np!",
+      // Your bot token. Never share it, anyone with it has full control of the bot
+      "token": "NEVER SHARE YOUR BOT TOKEN",
+      "clientId": "937880657697308682",
+      "discordServerId": "894529860145920118",
+      /*...*/
+    }
+    ```
+  </Spoiler>
+
+  <Spoiler title={"Adding the client and server ID"}>
+    <Admonition type={"info"}>
+      To get the server id you need to enable developer mode on Discord.<br/>
+      On the app go to&nbsp;`Settings > App Settings > Advanced`&nbsp;and enable&nbsp;`Developer Mode`.
+    </Admonition>
+    Paste the client ID you got from the bot page into the `clientId` entry in the config.<br/>
+    To get the server ID you need to right click the server icon and click `Copy Server ID`.
+    ```json5 {5 - 6}
+    {
+      /*...*/
+      // Your bot token. Never share it, anyone with it has full control of the bot
+      "token": "NEVER SHARE YOUR BOT TOKEN",
+      "clientId": "937880657697308682",
+      "discordServerId": "894529860145920118",
+      /*...*/
+    }
+    ```
+  </Spoiler>
+
+  <Spoiler title={"Setting the entries"}>
+
+    On the config file, `entries` will be empty by default, there you will configure what the server will do when
+    whitelisting the players.
+    There are **4** types of entries, for vanilla you have `TEAM` and `COMMAND`, if you have luckperms you can also use
+    `LUCKPERMS_GROUP` and `LUCKPERMS_PERMISSION`.
+    All of them takes a list of `roleIds` that will be used to whitelist the players, and a `type` that will be used to
+    determine what the server will do when whitelisting the players.
+    The default format is
+    ```json5 copy
+    {
+      //The Discord role ids that will be used to whitelist the players
+      "roleIds": ["Discord role id"],
+      //The method that will be used to whitelist the players
+      "type": "TYPE"
+    }
+    ```
+
+    <Spoiler title={"Team example"}>
+
+      ```json5 copy
+      {
+        "roleIds": ["Discord role id"],
+        "type": "TEAM",
+        "team": "minecraft_team_name"
+      }
+      ```
+    </Spoiler>
+    <Spoiler title={"Command example"}>
+
+      ```json5 copy
+      {
+        "roleIds": ["Discord role id"],
+        "type": "COMMAND",
+        "addCommand": "scorereboard players set %player% cool_people 1",
+        "removeCommand": "scorereboard players reset %player% cool_people"
+      }
+      ```
+    </Spoiler>
+    <Spoiler title={"Whitelist example"}>
+      This was added on 1.0.0 Alpha 6!
+
+      ```json5 copy
+      {
+        "roleIds": ["Discord role id"],
+        "type": "WHITELIST" //It does no extra action, it just whitelists the player
+      }
+      ```
+    </Spoiler>
+    <Spoiler title={"Luckperms examples"}>
+
+      <Tabs>
+        <TabItem value="group" label="Group" default>
+          ```json5 copy
+          {
+            "roleIds": ["Discord role id"],
+            "type": "LUCKPERMS_GROUP",
+            "group": "TIER_1"
+          }
+          ```
+        </TabItem>
+        <TabItem value="permission" label="Permission">
+          ```json5 copy
+          {
+            "roleIds": ["Discord role id"],
+            "type": "LUCKPERMS_PERMISSION",
+            "permission": "minecraft.command.teleport"
+          }
+          ```
+        </TabItem>
+      </Tabs>
+    </Spoiler>
+
+    The `admins` entry is an option that allows the users in it to use the developer commands. In the option you put the
+    ID of the users you want to have access to the dev commands.
+  </Spoiler>
+
+  <Spoiler title={"You can find an example configuration file here"}>
+
+    ```json5
+    {
+      // DO NOT CHANGE, CHANGING THIS WILL BREAK THE CONFIGURATION FILE
+      "CONFIG_VERSION": 1,
+      // When enabled it will keep a cache of previous registered users and will use it to automatically add the user back (if they have the proper role)
+      "enableWhitelistCache": true,
+      // The period the mod looks for outdated and invalid entries, this is an extra action to guarantee everything is updated
+      "updatePeriod": 60,
+      // A list of ids to allow users to use the debug commands
+      "admins": [
+        "387745099204919297",
+        "483715272960901120",
+        "302481489897979905"
+      ],
+      // The activity shown on the bot status
+      "botActivityType": "PLAYING",
+      // The bot command prefix
+      "prefix": "np!",
+      // The time in seconds the bot will lock a whitelist entry after it is added or updated, use -1 to disable changing the linked username
+      "lockTime": "1w",
+      // Your bot token. Never share it, anyone with it has full control of the bot
+      "token": "NEVER SHARE YOUR BOT TOKEN",
+      "discordServerId": "894529860145920118",
+      // When enabled, all interactions and slash commands will be ephemeral, meaning only the user can see the response.
+      "ephemeralReplies": true,
+      // The whitelist entry settings, please refer to the documentation to set them up
+      "entries": [
+        {
+          "roleIds": ["744941527545020468"],
+          "type": "WHITELIST"
+        }
+      ]
+    }
+    ```
+  </Spoiler>
+
+</Steps>
+
+export const VersionPicker = () => {
+  const [open, setOpen] = useState(false)
+  const [version, setVersion] = useState(undefined)
+  const [versions, setVersions] = useState([])
+  const [searchSuffix, setSearchSuffix] = useState("");
+
+  useEffect(() => {
+    setSearchSuffix(version ? `?g=${version}` : "");
+  }, [version]);
+
+  useEffect(() => {
+    //fetch game versions
+    fetch("https://api.modrinth.com/v2/project/autowhitelist")
+      .then(res => res.json())
+      .then(data => {
+        const gameVersions = data.game_versions
+        gameVersions.reverse()
+
+        setVersions(gameVersions)
+        setVersion(gameVersions[0])
+      })
+  }, []);
+
+  return (
+    <>
+      Minecraft version:
+      <br/>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            disabled={versions.length === 0}
+            role="combobox"
+            aria-expanded={open}
+            className="tw-w-[200px] tw-justify-between tw-cursor-pointer"
+          >
+            {version
+              ? versions.find((ver) => ver === version)
+              : "Select a version"}
+            <ChevronsUpDown className="tw-ml-2 tw-h-4 w-4 tw-shrink-0 tw-opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="tw-w-[200px] p-0">
+          <Command>
+            <CommandInput placeholder="Search version..." />
+            <CommandEmpty>No versions found</CommandEmpty>
+            <CommandGroup>
+              <div className={"tw-max-h-[15rem] tw-overflow-auto"}>
+                {versions.map((ver) => (
+                  <CommandItem
+                    key={ver}
+                    value={ver}
+                    className={"tw-cursor-pointer"}
+                    onSelect={(currentValue) => {
+                      setVersion(currentValue === version ? "" : currentValue)
+                      setOpen(false)
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "tw-mr-2 tw-h-4 tw-w-4",
+                        version === ver ? "tw-opacity-100" : "tw-opacity-0"
+                      )}
+                    />
+                    {ver}
+                  </CommandItem>
+                ))}
+              </div>
+            </CommandGroup>
+          </Command>
+        </PopoverContent>
+      </Popover>
+      <ol className={"tw-mt-4"}>
+        <li>Download the mod from <a href={`https://modrinth.com/mod/autowhitelist/versions${searchSuffix}`} target="_blank" rel="noopener noreferrer">Modrinth</a></li>
+        <li>Download the required dependencies <a href={`https://modrinth.com/mod/fabric-api/versions${searchSuffix}`} target="_blank" rel="noopener noreferrer">FabricAPI</a> and <a href="https://modrinth.com/mod/fabric-language-kotlin/versions" target="_blank" rel="noopener noreferrer">Fabric Language Kotlin</a></li>
+        <li>Put the mod in your mods folder</li>
+        <li>Start the server, this will generate the config file</li>
+        <li>Stop the server</li>
+      </ol>
+    </>
+  )
+}
