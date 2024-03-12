@@ -53,6 +53,32 @@ details > summary::before {
   height: 1.2em;
 }
 
-.font-header {
-  /*font: var(--ifm-heading-font-weight) var(--ifm-h5-font-size) / var(--ifm-heading-line-height) var(--ifm-heading-font-family);*/
+/*.font-header {
+  !*font: var(--ifm-heading-font-weight) var(--ifm-h5-font-size) / var(--ifm-heading-line-height) var(--ifm-heading-font-family);*!
+}*/
+
+.navbar::before {
+  content: "";
+  background: url("/static/img/noise.png");
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  opacity: 17%;
+  z-index: -100;
+}
+
+.navbar {
+  background: rgba(31, 31, 33, .3);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+
+  border: 0.0625rem solid rgb(255 255 255 /.1);
+  border-top: 0;
 }
