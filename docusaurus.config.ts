@@ -15,7 +15,7 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'awakenedredstone', // Usually your GitHub org/username.
+  organizationName: 'awakened-redstone', // Usually your GitHub org/username.
   projectName: 'awakened-docs', // Usually your repo name.
 
   onBrokenLinks: 'throw',

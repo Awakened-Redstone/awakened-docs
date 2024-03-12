@@ -34,3 +34,4 @@ next-env.d.ts
 # others
 /.idea/
 /.ignored/
+/bun.lockb
