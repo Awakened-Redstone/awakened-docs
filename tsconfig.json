@@ -4,7 +4,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@site/*": ["./*"]
+      "@site/*": ["./*"],
+      "@src/*": ["./src/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@components/*": ["./src/components/*"],
+      "@shadcn/*": ["./src/components/ui/*"]
     }
   }
 }

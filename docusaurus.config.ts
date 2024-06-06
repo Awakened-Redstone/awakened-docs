@@ -1,6 +1,8 @@
-import {PrismTheme, themes as prismThemes} from 'prism-react-renderer';
+import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import type * as Content from '@docusaurus/plugin-content-docs';
+import {resolve} from "node:path";
 
 const config: Config = {
   title: 'Awakened Docs',
@@ -29,17 +31,66 @@ const config: Config = {
     locales: ['en'],
   },
 
+  presets: [
+    [
+      '@docusaurus/preset-classic',
+      {
+        docs: {
+          id: 'autowhitelist',
+          path: './docs/minecraft/autowhitelist',
+          routeBasePath: '/minecraft/autowhitelist',
+          lastVersion: 'current',
+          sidebarPath: 'sidebars.ts',
+          versions: {
+            current: {
+              label: '1.0.0 Beta 3',
+            },
+            "1.0.0-beta.1": {
+              label: '1.0.0 Beta 1',
+            },
+          },
+        },
+        /*docs: {
+          id: 'autowhitelist',
+          path: './docs/minecraft/autowhitelist',
+          routeBasePath: '/minecraft/autowhitelist',
+          sidebarPath: 'sidebars/autowhitelist.ts',
+          lastVersion: 'current',
+          versions: {
+            current: {
+              label: '1.0.0Beta3',
+            },
+          },
+        },*/
+        /*blog: {
+          showReadingTime: true,
+          // Please change this to your repo.
+          // Remove this to remove the "edit this page" links.
+          editUrl:
+            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+        },*/
+        theme: {
+          customCss: './src/css/custom.css',
+        },
+      } satisfies Preset.Options,
+    ],
+  ],
   plugins: [
     /*[
-      'content-docs',
-      /!** @type {import('@docusaurus/plugin-content-docs').Options} *!/
+      '@docusaurus/plugin-content-docs',
       ({
         id: 'autowhitelist',
         path: './docs/minecraft/autowhitelist',
         routeBasePath: '/minecraft/autowhitelist',
-        sidebarPath: require.resolve('./sidebars/autowhitelist.js'),
+        sidebarPath: 'sidebars/autowhitelist.ts',
         editCurrentVersion: true,
-      }),
+        lastVersion: 'current',
+        versions: {
+          current: {
+            label: '1.0.0Beta3',
+          },
+        },
+      } satisfies Content.Options),
     ],*/
     async function tailwind(context, options) {
       return {
@@ -52,31 +103,29 @@ const config: Config = {
         },
       };
     },
-  ],
-  presets: [
-    [
-      'classic',
-      {
-        docs: {
-          path: './docs',
-          routeBasePath: '',
-          sidebarPath: 'sidebars.ts',
+    function (context, options) {
+      return {
+        name: 'webpack-alias',
+        configureWebpack(config, isServer) {
+          return {
+            resolve: {
+              alias: {
+                '@src': resolve(context.siteDir, "src"),
+                "@lib": resolve(context.siteDir, "src", "lib"),
+                "@components": resolve(context.siteDir, "src", "components"),
+                "@shadcn": resolve(context.siteDir, "src", "components", "ui"),
+              }
+            }
+          };
         },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        },
-        theme: {
-          customCss: './src/css/custom.css',
-        },
-      } satisfies Preset.Options,
-    ],
+      };
+    }
   ],
 
   themeConfig: {
+    colorMode: {
+      respectPrefersColorScheme: true,
+    },
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
@@ -85,14 +134,22 @@ const config: Config = {
         alt: 'Awakened Redstone Logo',
         src: 'img/redstone_border.png',
       },
+      hideOnScroll: true,
       items: [
         {
           type: 'docSidebar',
           position: 'left',
           sidebarId: 'autowhitelist',
           label: 'Auto Whitelist',
+          docsPluginId: 'autowhitelist',
         },
-        {to: '/blog', label: 'Blog', position: 'right'},
+        {
+          type: 'docsVersionDropdown',
+          position: 'right',
+          dropdownActiveClassDisabled: true,
+          docsPluginId: 'autowhitelist',
+        },
+        /*{to: '/blog', label: 'Blog', position: 'right'},*/
         {
           href: 'https://discord.gg/MTqsjwMpN2',
           label: 'Discord',

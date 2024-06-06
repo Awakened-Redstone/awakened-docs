@@ -1,7 +1,7 @@
 import cn from 'clsx'
 import type { ComponentProps, ReactElement } from 'react'
 import React from 'react'
-import styles from './steps.module.css'
+import styles from '@components/steps.module.css'
 
 export function Steps({children, className, ...props}: ComponentProps<'div'>): ReactElement {
     return (

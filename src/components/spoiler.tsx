@@ -9,7 +9,7 @@ import React, {
     useState
 } from "react";
 import cn from "clsx";
-import {DetailsProvider, useDetails} from "./context/details";
+import {DetailsProvider, useDetails} from "@components/context/details";
 
 const findSummary = (children: ReactNode) => {
     let summary: ReactNode = null
@@ -136,18 +136,23 @@ function Collapse({children, className, isOpen, horizontal = false}: {
                 container.style.height = `${inner.clientHeight}px`
             }, 0)
 
-            /*animationRef.current = window.setTimeout(() => {
+            animationRef.current = window.setTimeout(() => {
                 // should be style property in kebab-case, not css class name
                 container.style.removeProperty('height')
-            }, 500)*/
+            }, 500)
         } else {
+            setTimeout(() => {
+                if (!horizontal) {
+                    container.style.height = `${inner.clientHeight}px`
+                }
+            }, 0);
             setTimeout(() => {
                 if (horizontal) {
                     container.style.width = '0px'
                 } else {
                     container.style.height = '0px'
                 }
-            }, 0)
+            }, 20);
         }
     }, [horizontal, isOpen])
 

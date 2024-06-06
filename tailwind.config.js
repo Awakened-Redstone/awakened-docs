@@ -32,11 +32,15 @@ module.exports = {
           "dark": "#13141a",
           "light": "#e5e7eb",
         },
+        "background-secondary": {
+          DEFAULT: "var(--background)",
+          "dark": "#1b1d24",
+          "light": "#f6f8fa",
+        },
         button: {
-          "dark": "#26292f",
+          "dark": "#15161a",
           "light": "#fff",
         },
-
 
         border: "var(--border)",
         input: {

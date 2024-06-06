@@ -6,14 +6,12 @@ import {useEffect, useState} from "react";
 import { Check, ChevronsUpDown } from "lucide-react"
 import { cn } from "@lib/utils"
 import Admonition from '@theme/Admonition'
-import Link from "@docusaurus/core/lib/client/exports/Link";
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import CodeInline from "@docusaurus/theme-classic/lib/theme/CodeInline";
 import {Steps} from "@components/steps";
 import {Spoiler} from "@components/spoiler";
 import {LazyImage} from "@components/LazyImage";
-import {Button} from "@components/ui/button";
+import {Button} from "@shadcn/button";
 import {Popover, PopoverContent, PopoverTrigger} from "@shadcn/popover";
 import {Command, CommandInput, CommandEmpty, CommandGroup, CommandItem} from "@shadcn/command";
 
@@ -22,6 +20,9 @@ import {Command, CommandInput, CommandEmpty, CommandGroup, CommandItem} from "@s
 :::tip Recommendation
   Basic JSON or JSON5 knowledge is highly recommended.
 :::
+:::danger Watch out!
+Some Discord integration mods use a different version of JDA (the library used to interact with Discord), this may cause issues or failures.
+:::
 
 <Steps>
   ### Installing the mod
@@ -29,211 +30,191 @@ import {Command, CommandInput, CommandEmpty, CommandGroup, CommandItem} from "@s
   Make sure you download the correct version for your server's Minecraft version.
   :::
 
-  [//]: # (Dropdown to select a minecraft version)
+[//]: # (Dropdown to select a minecraft version)
+
   <VersionPicker/>
 
   ### Setting up the Discord bot
 
-  <Spoiler title={"Creating the app"}>
+  <Spoiler title={"Creating the bot"}>
     <LazyImage
-      src={"/autowhitelist/tutorial/create_app.gif"}
+      src={"https://raw.githubusercontent.com/Awakened-Redstone/Awakened-Redstone/master/assets/images/autowhitelist/create_bot_v2.gif"}
       alt={"Creating the bot gif"}/>
   </Spoiler>
 
-  <Spoiler title={"Getting the bot token"}>
-    <LazyImage src={"/autowhitelist/tutorial/get_token.gif"}
+  <Spoiler title={"Important settings"}>
+    <LazyImage
+      src={"https://raw.githubusercontent.com/Awakened-Redstone/Awakened-Redstone/master/assets/images/autowhitelist/bot_settings_v2.gif"}
+      alt={"Important settings gif"}/>
+  </Spoiler>
+
+  <Spoiler title={"Getting the token"}>
+
+    <LazyImage src={"https://cdn.glitch.global/b4fe08b2-a216-4ca6-a836-38b072b573c1/Screenshot_1403.png"}
                alt={"Getting the token"}/>
   </Spoiler>
 
+  <Spoiler title={"Getting the client ID"}>
+
+    <LazyImage src={"https://cdn.glitch.global/b4fe08b2-a216-4ca6-a836-38b072b573c1/Screenshot_1405.png"}
+               alt={"Getting ClientId"}/>
+  </Spoiler>
+
   <Spoiler title={"Adding to your server"}>
+
     <LazyImage
-      src={"/autowhitelist/tutorial/add_to_server.gif"}
+      src={"https://github.com/Awakened-Redstone/Awakened-Redstone/blob/master/assets/images/autowhitelist/adding_bot.gif?raw=true"}
       alt={"Adding to your server gif"}/>
   </Spoiler>
 
   ### Configuring the mod
 
   <Spoiler title={"Adding the bot token"}>
-    ```json5 {5}
+    ```json5 {4}
     {
-      /*...*/
-      "lock_time": "1d",
+      "prefix": "np!",
       // Your bot token. Never share it, anyone with it has full control of the bot
       "token": "NEVER SHARE YOUR BOT TOKEN",
-      "discord_server_id": 988466506671194222,
-      // When enabled, all interactions and slash commands will be ephemeral, meaning only the user can see the response.
-      "ephemeral_replies": true,
+      "clientId": "937880657697308682",
+      "discordServerId": "894529860145920118",
       /*...*/
     }
     ```
   </Spoiler>
 
-  <Spoiler title={"Adding the server id"}>
+  <Spoiler title={"Adding the client and server ID"}>
     <Admonition type={"info"}>
       To get the server id you need to enable developer mode on Discord.<br/>
       On the app go to&nbsp;`Settings > App Settings > Advanced`&nbsp;and enable&nbsp;`Developer Mode`.
     </Admonition>
-    <LazyImage
-      src={"/autowhitelist/tutorial/get_server_id.gif"}
-      alt={"Adding to your server gif"}/>
-    ```json5 {6}
+    Paste the client ID you got from the bot page into the `clientId` entry in the config.<br/>
+    To get the server ID you need to right click the server icon and click `Copy Server ID`.
+    ```json5 {5-6}
     {
       /*...*/
-      "lock_time": "1d",
       // Your bot token. Never share it, anyone with it has full control of the bot
       "token": "NEVER SHARE YOUR BOT TOKEN",
-      "discord_server_id": 988466506671194222,
-      // When enabled, all interactions and slash commands will be ephemeral, meaning only the user can see the response.
-      "ephemeral_replies": true,
+      "clientId": "937880657697308682",
+      "discordServerId": "894529860145920118",
       /*...*/
     }
     ```
   </Spoiler>
 
   <Spoiler title={"Setting the entries"}>
-    <Admonition type={"info"}>
-      <Link href={"./config-gen"}>You can use the entry generator for an easier setup</Link>
-    </Admonition>
 
     On the config file, `entries` will be empty by default, there you will configure what the server will do when
     whitelisting the players.
-
-    All of them takes a list of `roles` that will be used to whitelist the players, and a `type` that will be used to
+    There are **4** types of entries, for vanilla you have `TEAM` and `COMMAND`, if you have luckperms you can also use
+    `LUCKPERMS_GROUP` and `LUCKPERMS_PERMISSION`.
+    All of them takes a list of `roleIds` that will be used to whitelist the players, and a `type` that will be used to
     determine what the server will do when whitelisting the players.
-
-    `roles` takes either the role ID or the role name, prefixed by an `@`, you can use both ways on the same entry
-
-    Any extra keys (if any) go inside the `execute` object
-
     The default format is
     ```json5 copy
     {
-      //The Discord roles that will be used to whitelist the players
-      "roles": ["Discord role id", "@Or the role name"],
+      //The Discord role ids that will be used to whitelist the players
+      "roleIds": ["Discord role id"],
       //The method that will be used to whitelist the players
-      "type": "namespace:path"
+      "type": "TYPE"
     }
     ```
 
-    <div className={"tw-bg-background-secondary-light dark:tw-bg-background-secondary-dark tw-p-2 tw-rounded-md tw-mb-4 tab-no-pb"}>
-      <Tabs className={"tw-border-b-2 tw-rounded dark:tw-bg-black/20"}>
-        <TabItem value="autowhitelist:whitelist" label="Just whitelist" default>
-          ```json5 copy
-          {
-            "roles": ["@Discord role"],
-            "type": "autowhitelist:whitelist",
-          }
-          ```
-        </TabItem>
-        <TabItem value="autowhitelist:team" label="Join vanilla team">
-          The player is removed from the team when removed from the whitelist
-          If their role change the mod will properly upgrade/downgrade their team
-          ```json5 copy
-          {
-            "roles": ["@Discord role"],
-            "type": "autowhitelist:team",
-            "execute": {
-              "associate_team": "vanilla_team_name"
-            }
-          }
-          ```
-        </TabItem>
-        <TabItem value="autowhitelist:execute_command" label="Execute command">
-          When an user's role change to another valid one the remove and add commands will be executed
-          First it executes the remove command of the old entry and than the add command of the new one
+    <Spoiler title={"Team example"}>
 
+      ```json5 copy
+      {
+        "roleIds": ["Discord role id"],
+        "type": "TEAM",
+        "team": "minecraft_team_name"
+      }
+      ```
+    </Spoiler>
+    <Spoiler title={"Command example"}>
+
+      ```json5 copy
+      {
+        "roleIds": ["Discord role id"],
+        "type": "COMMAND",
+        "addCommand": "scorereboard players set %player% cool_people 1",
+        "removeCommand": "scorereboard players reset %player% cool_people"
+      }
+      ```
+    </Spoiler>
+    <Spoiler title={"Whitelist example"}>
+      This was added on 1.0.0 Alpha 6!
+
+      ```json5 copy
+      {
+        "roleIds": ["Discord role id"],
+        "type": "WHITELIST" //It does no extra action, it just whitelists the player
+      }
+      ```
+    </Spoiler>
+    <Spoiler title={"Luckperms examples"}>
+
+      <Tabs>
+        <TabItem value="group" label="Group" default>
           ```json5 copy
           {
-            "roleIds": ["@Discord role"],
-            "type": "autowhitelist:execute_command",
-            "execute": {
-              "on_add": "say Welcome {player}"
-              "on_remove": "say We will mess {player}"
-            }
+            "roleIds": ["Discord role id"],
+            "type": "LUCKPERMS_GROUP",
+            "group": "TIER_1"
           }
           ```
         </TabItem>
-        <TabItem value="autowhitelist:luckperms" label="Lurperms integration">
-          <div className={"tw-px-4"}>
-            <Tabs>
-              <TabItem value="group" label="Group" default>
-                ```json5 copy
-                {
-                  "roleIds": ["@Discord role"],
-                  "type": "autowhitelist:luckperms/group",
-                  "execute": {
-                    "group": "TIER_1"
-                  }
-                }
-                ```
-              </TabItem>
-              <TabItem value="permission" label="Permission">
-                ```json5 copy
-                {
-                  "roleIds": ["@Discord role"],
-                  "type": "autowhitelist:luckperms/permission",
-                  "execute": {
-                    "permission": "worldedit.navigation.thru.tool"
-                  }
-                }
-                ```
-              </TabItem>
-            </Tabs>
-          </div>
+        <TabItem value="permission" label="Permission">
+          ```json5 copy
+          {
+            "roleIds": ["Discord role id"],
+            "type": "LUCKPERMS_PERMISSION",
+            "permission": "minecraft.command.teleport"
+          }
+          ```
         </TabItem>
       </Tabs>
-    </div>
+    </Spoiler>
 
     The `admins` entry is an option that allows the users in it to use the developer commands. In the option you put the
     ID of the users you want to have access to the dev commands.
   </Spoiler>
 
-  <Spoiler title={"Example configuration file"}>
+  <Spoiler title={"You can find an example configuration file here"}>
 
     ```json5
     {
-      // The JSON schema for the config, this is for text editors to show syntax highlighting, do not change it
-      "$schema": "https://awakenedredstone.com/json-schema/autowhitelist/draft-01.json",
-      // DO NOT CHANGE, MODIFYING THIS VALUE WILL BREAK THE CONFIGURATION FILE
-      "CONFIG_VERSION": 2,
-      // When enabled, it will keep a cache of previous registered users and will use it to automatically add the user back (if they have the proper role)
-      "enable_whitelist_cache": true,
+      // DO NOT CHANGE, CHANGING THIS WILL BREAK THE CONFIGURATION FILE
+      "CONFIG_VERSION": 1,
+      // When enabled it will keep a cache of previous registered users and will use it to automatically add the user back (if they have the proper role)
+      "enableWhitelistCache": true,
       // The period the mod looks for outdated and invalid entries, this is an extra action to guarantee everything is updated
-      "update_period": 60,
+      "updatePeriod": 60,
       // A list of ids to allow users to use the debug commands
       "admins": [
-        387745099204919297
+        "387745099204919297",
+        "483715272960901120",
+        "302481489897979905"
       ],
-      // The activity type shown on the bot status
-      "bot_activity_type": "PLAYING",
+      // The activity shown on the bot status
+      "botActivityType": "PLAYING",
       // The bot command prefix
       "prefix": "np!",
       // The time in seconds the bot will lock a whitelist entry after it is added or updated, use -1 to disable changing the linked username
-      "lock_time": "1d",
+      "lockTime": "1w",
       // Your bot token. Never share it, anyone with it has full control of the bot
       "token": "NEVER SHARE YOUR BOT TOKEN",
-      "discord_server_id": 988466506671194222,
+      "discordServerId": "894529860145920118",
       // When enabled, all interactions and slash commands will be ephemeral, meaning only the user can see the response.
-      "ephemeral_replies": true,
+      "ephemeralReplies": true,
       // The whitelist entry settings, please refer to the documentation to set them up
       "entries": [
         {
-          "roles": ["@Twitch subs"],
-          "type": "autowhitelist:whitelist"
+          "roleIds": ["744941527545020468"],
+          "type": "WHITELIST"
         }
       ]
     }
     ```
   </Spoiler>
-  
-  ### Applying the config
-  
-  To apply the changes simply run `/autowhitelist reload`  
-  This will reload the configs, the cache and restart the bot
-  
-  To only reload the configs run `/autowhitelist reload config`  
-  To only reload the cache run `/autowhitelist reload cache`  
-  To only restart the bot run `/autowhitelist reload bot`
 
 </Steps>
 
@@ -311,8 +292,9 @@ export const VersionPicker = () => {
       <ol className={"tw-mt-4"}>
         <li>Download the mod from <a href={`https://modrinth.com/mod/autowhitelist/versions${searchSuffix}`} target="_blank" rel="noopener noreferrer">Modrinth</a></li>
         <li>Download the required dependencies <a href={`https://modrinth.com/mod/fabric-api/versions${searchSuffix}`} target="_blank" rel="noopener noreferrer">FabricAPI</a> and <a href="https://modrinth.com/mod/fabric-language-kotlin/versions" target="_blank" rel="noopener noreferrer">Fabric Language Kotlin</a></li>
-        <li>Put the mods in your mods folder</li>
-        <li>Start the server, this will generate the config file at <CodeInline>config/autowhitelist.json5</CodeInline></li>
+        <li>Put the mod in your mods folder</li>
+        <li>Start the server, this will generate the config file</li>
+        <li>Stop the server</li>
       </ol>
     </>
   )

@@ -3,8 +3,8 @@ import { type DialogProps } from "@radix-ui/react-dialog"
 import { Command as CommandPrimitive } from "cmdk"
 import { Search } from "lucide-react"
 
-import { cn } from "@site/src/lib/utils"
-import { Dialog, DialogContent } from "@site/src/components/ui/dialog"
+import { cn } from "@lib/utils"
+import { Dialog, DialogContent } from "@shadcn/dialog"
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -115,7 +115,7 @@ const CommandItem = React.forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      "tw-relative tw-flex tw-cursor-default tw-select-none tw-items-center tw-rounded-sm tw-px-2 tw-py-1.5 tw-text-sm tw-outline-none aria-selected:tw-bg-accent aria-selected:tw-text-accent-foreground data-[disabled]:tw-pointer-events-none data-[disabled]:tw-opacity-50",
+      "tw-relative tw-flex tw-cursor-default tw-select-none tw-items-center tw-rounded-sm tw-px-2 tw-py-1.5 tw-text-sm tw-outline-none aria-selected:tw-bg-accent aria-selected:tw-text-accent-foreground data-[disabled=true]:tw-pointer-events-none data-[disabled]:tw-opacity-50",
       className
     )}
     {...props}

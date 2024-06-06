@@ -82,3 +82,25 @@ details > summary::before {
   border: 0.0625rem solid rgb(255 255 255 /.1);
   border-top: 0;
 }
+
+.tab-no-pb > .tabs-container {
+  margin-bottom: 0;
+}
+
+.table-full > table {
+    width: 100%;
+    display: table;
+}
+
+.time-format > table {
+    & > thead > tr > th:nth-child(1) {
+        width: fit-content;
+    }
+    & > thead > tr > th:nth-child(2) {
+        width: 100%;
+    }
+}
+
+.codeBlockContainer_node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-Container-styles-module:nth-last-child(1) {
+  margin-bottom: 0;
+}
