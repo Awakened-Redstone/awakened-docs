@@ -32,6 +32,10 @@ import {Command, CommandInput, CommandEmpty, CommandGroup, CommandItem} from "@s
   [//]: # (Dropdown to select a minecraft version)
   <VersionPicker/>
 
+  :::warning
+  The slash commands may take a few minutes to be available, this is a Discord limitation
+  :::
+
   ### Setting up the Discord bot
 
   <Spoiler title={"Creating the app"}>
@@ -311,7 +315,7 @@ export const VersionPicker = () => {
       <ol className={"tw-mt-4"}>
         <li>Download the mod from <a href={`https://modrinth.com/mod/autowhitelist/versions${searchSuffix}`} target="_blank" rel="noopener noreferrer">Modrinth</a></li>
         <li>Download the required dependencies <a href={`https://modrinth.com/mod/fabric-api/versions${searchSuffix}`} target="_blank" rel="noopener noreferrer">FabricAPI</a> and <a href="https://modrinth.com/mod/fabric-language-kotlin/versions" target="_blank" rel="noopener noreferrer">Fabric Language Kotlin</a></li>
-        <li>Put the mods in your mods folder</li>
+        <li>Put the mods in your <CodeInline>mods</CodeInline> folder</li>
         <li>Start the server, this will generate the config file at <CodeInline>config/autowhitelist.json5</CodeInline></li>
       </ol>
     </>
