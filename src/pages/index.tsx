@@ -40,7 +40,7 @@ export default function Home(): JSX.Element {
             <HomepageHeader/>
             <main className={"tw-w-full"}>
                 <div className={"tw-mx-auto tw-w-fit tw-pt-10"}>
-                    <a href="https://bisecthosting.com/Redstone?r=autowhitelist_lite" target="_blank">
+                    <a href="https://bisecthosting.com/Redstone?r=docs" target="_blank">
                         <div>
                             <img
                                 src="https://www.bisecthosting.com/partners/custom-banners/12f98343-bc4b-4629-9c91-26dfe685d92a.webp"
