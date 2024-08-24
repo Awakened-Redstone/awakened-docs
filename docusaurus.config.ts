@@ -43,6 +43,9 @@ const config: Config = {
           sidebarPath: 'sidebars.ts',
           versions: {
             current: {
+              label: '1.0.0 Beta 5',
+            },
+              "1.0.0-beta.3": {
               label: '1.0.0 Beta 3',
             },
             "1.0.0-beta.1": {
