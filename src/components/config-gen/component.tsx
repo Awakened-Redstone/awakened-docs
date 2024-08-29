@@ -205,7 +205,7 @@ export function ConfigGen() {
 
   useEffect(() => {
     const output: any = {
-      "roleIds": !!values.role ? values.role.split(/, ?/) : [],
+      "roles": !!values.role ? values.role.split(/, ?/) : [],
       "type": values.type
     }
 
