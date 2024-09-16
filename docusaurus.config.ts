@@ -53,25 +53,6 @@ const config: Config = {
             },
           },
         },
-        /*docs: {
-          id: 'autowhitelist',
-          path: './docs/minecraft/autowhitelist',
-          routeBasePath: '/minecraft/autowhitelist',
-          sidebarPath: 'sidebars/autowhitelist.ts',
-          lastVersion: 'current',
-          versions: {
-            current: {
-              label: '1.0.0Beta3',
-            },
-          },
-        },*/
-        /*blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        },*/
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -79,13 +60,13 @@ const config: Config = {
     ],
   ],
   plugins: [
-    /*[
+    [
       '@docusaurus/plugin-content-docs',
       ({
-        id: 'autowhitelist',
-        path: './docs/minecraft/autowhitelist',
-        routeBasePath: '/minecraft/autowhitelist',
-        sidebarPath: 'sidebars/autowhitelist.ts',
+        id: 'default_components',
+        path: './docs/minecraft/default_components',
+        routeBasePath: '/minecraft/default_components',
+        sidebarPath: 'sidebars.ts',
         editCurrentVersion: true,
         lastVersion: 'current',
         versions: {
@@ -94,7 +75,7 @@ const config: Config = {
           },
         },
       } satisfies Content.Options),
-    ],*/
+    ],
     async function tailwind(context, options) {
       return {
         name: "docusaurus-tailwindcss",
@@ -145,6 +126,13 @@ const config: Config = {
           sidebarId: 'autowhitelist',
           label: 'Auto Whitelist',
           docsPluginId: 'autowhitelist',
+        },
+        {
+          type: 'docSidebar',
+          position: 'left',
+          sidebarId: 'default_components',
+          label: 'Default Components',
+          docsPluginId: 'default_components',
         },
         {
           type: 'docsVersionDropdown',

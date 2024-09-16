@@ -1,0 +1,80 @@
+---
+sidebar_position: 1
+---
+
+# Introduction
+
+:::warning
+While this mod is not required on the client, the lack of it may result in weird behavior
+:::
+
+Default Components allows you to change the data components of any item in the game, vanilla and modded.  
+The mod works with datapacks and can be easily setup
+
+If the mod is present on the client it will synchronize all the components so everything looks as it should
+
+## Creating a datapack
+
+To create the datapack you must head to you world folder, then to `datapacks`
+There you create a folder with the name of your choice
+Inside the folder create a `pack.mcmeta` file and a `data` folder
+
+On `pack.mcmeta` put the following:
+```json title="pack.mcmeta"
+{
+  "pack": {
+    "description": "Custom default components",
+    "pack_format": 34
+  }
+}
+```
+Feel free to customize the `description` content
+
+Inside the `data` folder you will create a new folder with the name being the namespace of the item you want to change
+
+## Configuring
+
+All items have a unique ID on the following format: `namespace:path`  
+To visualize that enable advanced tooltips with `F3 + H`, it will show on the bottom of the item tooltip  
+Also keep note of the `path`, you will need it soon
+
+**To modify the components of ALL items the namespace must be `minecraft`**
+
+Create a folder called `default_components` and navigate into it
+
+Now create a file named `<path>.json` with `<path>` being the item's path  
+**If you want to modify the components of all items, they file must be named `all.json`**
+
+Now inside that file put the following content:
+```json
+{
+  "add": {},
+  "remove": []
+}
+```
+
+Inside `add` you will put the components to add, on the format `"<component>": <value>`  
+For `remove` you will use the format `"<component>"`
+
+:::danger
+Some components are required for items to function, and removing them may render them useless or even result in crashes
+:::
+    
+At the end it should look something like this:
+```json
+{
+  "add": {
+    "minecraft:food": {
+      "saturation": 1,
+      "nutrition": 1
+    }
+  },
+  "remove": [
+    "minecraft:max_stack_size"
+  ]
+}
+```
+Now your datapack is ready to use!
+
+To enable it run `/datapack enable <datapack>`  
+If you already have the datapack enabled simply run `/reload`
