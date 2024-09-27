@@ -241,7 +241,7 @@ export function ConfigGen() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="autowhitelist:whitelist">Whitelist player</SelectItem>
-                      <SelectItem value="autowhitelist:command">Execute command</SelectItem>
+                      <SelectItem value="autowhitelist:execute_command">Execute command</SelectItem>
                       <SelectItem value="autowhitelist:team">Add to vanilla team</SelectItem>
                       <SelectItem value="autowhitelist:luckperms/group">Give Luckperms group</SelectItem>
                       <SelectItem value="autowhitelist:luckperms/permission">Give Luckperms permission</SelectItem>
