@@ -13,8 +13,8 @@ const formSchema = z.object({
     message: "Roles must be Ids or role names prefixed with @"
   }),
   type: z.string().regex(/^([a-z0-9_.\-]+:)?[a-z0-9_.\-]+$/).min(2),
-  add_command: z.string(),
-  remove_command: z.string(),
+  on_add: z.string(),
+  on_remove: z.string(),
   associate_team: z.string().regex(/^[0-9A-Za-z_\-.+]+$/gi, {
     message: "You must insert a valid vanilla team name"
   }).nullable(),
@@ -32,8 +32,8 @@ export function ConfigGen() {
     defaultValues: {
       role: "",
       type: "autowhitelist:whitelist",
-      add_command: "",
-      remove_command: "",
+      on_add: "",
+      on_remove: "",
       associate_team: "",
       group: "",
       permission: "",
@@ -54,13 +54,13 @@ export function ConfigGen() {
 
   useEffect(() => {
     switch (values.type) {
-      case "autowhitelist:command": {
-        setExtra(["add_command", "remove_command"])
+      case "autowhitelist:execute_command": {
+        setExtra(["on_add", "on_remove"])
         setExtraInput(
           <>
             <FormField
               control={form.control}
-              name="add_command"
+              name="on_add"
               render={({ field }) => (
                 <>
                   <FormItem>
@@ -74,25 +74,9 @@ export function ConfigGen() {
                 </>
               )}
             />
-            {/*<FormField
-              control={form.control}
-              name="on_join"
-              render={({ field }) => (
-                <>
-                  <FormItem className={"tw-flex tw-items-center tw-space-x-2 tw-my-4"}>
-                    <FormControl>
-                      <Switch {...field} onCheckedChange={field.onChange}/>
-                    </FormControl>
-                    <FormLabel className={"!tw-mt-0"}>Wait for the player to join</FormLabel>
-                    <FormDescription />
-                    <FormMessage />
-                  </FormItem>
-                </>
-              )}
-            />*/}
             <FormField
               control={form.control}
-              name="remove_command"
+              name="on_remove"
               render={({ field }) => (
                 <>
                   <FormItem>
@@ -219,7 +203,7 @@ export function ConfigGen() {
   useEffect(() => {
     form.trigger("role");
     form.trigger(extra);
-  }, [values.role, values.add_command, values.remove_command, values.associate_team, values.group, values.permission]);
+  }, [values.role, values.on_add, values.on_remove, values.associate_team, values.group, values.permission]);
 
   return (
     <>
