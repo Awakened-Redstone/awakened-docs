@@ -19,18 +19,22 @@ import {Command, CommandInput, CommandEmpty, CommandGroup, CommandItem} from "@s
 
 # Installing
 
-:::tip
+:::tip Recommendation
   Basic JSON or JSON5 knowledge is highly recommended.
 :::
 
 <Steps>
   ### Installing the mod
-  :::note
-    Make sure you download the correct version for your server's Minecraft version.
+  :::info
+  Make sure you download the correct version for your server's Minecraft version.
   :::
 
   [//]: # (Dropdown to select a minecraft version)
   <VersionPicker/>
+
+  :::warning
+  The slash commands may take a few minutes to be available, this is a Discord limitation
+  :::
 
   ### Setting up the Discord bot
   
@@ -93,7 +97,7 @@ import {Command, CommandInput, CommandEmpty, CommandGroup, CommandItem} from "@s
   </Spoiler>
 
   <Spoiler title={"Setting the entries"}>
-    <Admonition type={"tip"}>
+    <Admonition type={"info"}>
       <Link href={"./config-gen"}>You can use the entry generator for an easier setup</Link>
     </Admonition>
 
@@ -150,7 +154,7 @@ import {Command, CommandInput, CommandEmpty, CommandGroup, CommandItem} from "@s
             "type": "autowhitelist:execute_command",
             "execute": {
               "on_add": "say Welcome {player}"
-              "on_remove": "say We will miss {player}"
+              "on_remove": "say We will mess {player}"
             }
           }
           ```
@@ -233,10 +237,6 @@ import {Command, CommandInput, CommandEmpty, CommandGroup, CommandItem} from "@s
   To apply the changes: 
   1. Run `/autowhitelist reload config` to load the new configuration
   2. Run `/autowhitelist reload bot` to restart the bot
-
-  :::info
-    The slash commands may take a few minutes to be available, this is a Discord limitation
-  :::
   
   To only reload the configs run `/autowhitelist reload config`  
   To only reload the cache run `/autowhitelist reload cache`  
@@ -248,6 +248,11 @@ export const VersionPicker = () => {
   const [open, setOpen] = useState(false)
   const [version, setVersion] = useState(undefined)
   const [versions, setVersions] = useState([])
+  const [searchSuffix, setSearchSuffix] = useState("");
+
+  useEffect(() => {
+    setSearchSuffix(version ? `?g=${version}` : "");
+  }, [version]);
 
   useEffect(() => {
     //fetch game versions
@@ -311,8 +316,8 @@ export const VersionPicker = () => {
         </PopoverContent>
       </Popover>
       <ol className={"tw-mt-4"}>
-        <li>Download the mod from <a href={`https://modrinth.com/mod/autowhitelist?version=${version}#download`} target="_blank" rel="noopener noreferrer">Modrinth</a></li>
-        <li>Download the required dependencies <a href={`https://modrinth.com/mod/fabric-api?version=${version}#download`} target="_blank" rel="noopener noreferrer">FabricAPI</a> and <a href={`https://modrinth.com/mod/fabric-language-kotlin?version=${version}#download`} target="_blank" rel="noopener noreferrer">Fabric Language Kotlin</a></li>
+        <li>Download the mod from <a href={`https://modrinth.com/mod/autowhitelist/versions${searchSuffix}`} target="_blank" rel="noopener noreferrer">Modrinth</a></li>
+        <li>Download the required dependencies <a href={`https://modrinth.com/mod/fabric-api/versions${searchSuffix}`} target="_blank" rel="noopener noreferrer">FabricAPI</a> and <a href="https://modrinth.com/mod/fabric-language-kotlin/versions" target="_blank" rel="noopener noreferrer">Fabric Language Kotlin</a></li>
         <li>Put the mods in your <CodeInline>mods</CodeInline> folder</li>
         <li>Start the server, this will generate the config file at <CodeInline>config/autowhitelist.json5</CodeInline></li>
       </ol>

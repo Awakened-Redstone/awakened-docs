@@ -217,7 +217,7 @@ export function ConfigGen() {
             }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>If user has role</FormLabel>
+                <FormLabel>If user has</FormLabel>
                 <FormControl>
                   <Input placeholder="@Twitch subs" type={"text"} {...field} />
                 </FormControl>

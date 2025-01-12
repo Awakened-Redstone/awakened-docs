@@ -1,11 +1,10 @@
 ---
 title: Whitelist cache
-sidebar_potision: 2
+sidebar_position: 2
 ---
 
-The whitelist cache is an implementation made to allow users that already registered before to
-join back without having to rerun the registration command<br/>
-Once a user looses their role or leaves the server they are removed from the whitelist,
-removing all track of the user, the cache will keep the user UUID to whitelist them
-when they join back after regaining the role. The process was optimized to be fast,
-giving a seamless experience to the user.
+The <u>whitelist cache</u> keeps track of previous whitelist entries that were 
+removed due to the user no longer having a valid role or leaving the Discord server.
+
+Once a player in the cache tries to join the server, the mod will add 
+their entry back without any visible changes to the player.
