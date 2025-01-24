@@ -32,14 +32,14 @@ Feel free to customize the `description` content
 
 ## Configuring
 
-All items have a unique ID on the following format: `namespace:path`, for example `minecraft:diamond`  
+All items have a unique ID in the following format: `namespace:path`, for example `minecraft:diamond`  
 To visualize the [identifier](https://minecraft.wiki/w/Resource_location#Conversion_to_string) enable advanced tooltips with `F3 + H`, 
 it will show in dark gray at the bottom of the item tooltip  
 Note both the `namespace` and the `path` separately
 
 :::info
 The [namespace](https://minecraft.wiki/w/Resource_location#Namespaces) is the mod id of the item, for vanilla Minecraft it is `minecraft`  
-The path represents the item, but not always matches the item name, for example, `Block of Diamond` is `diamond_block`
+The path represents the item, but may not always match the item name, for example, `Block of Diamond` is `diamond_block`
 :::
 
 Inside the `data` folder you will create a new folder with the name being the [namespace](https://minecraft.wiki/w/Resource_location#Namespaces) of the item you want to change
@@ -47,7 +47,7 @@ Inside the `data` folder you will create a new folder with the name being the [n
 Inside your namespace folder, create a new folder named `default_components` and navigate into it
 
 Now create a file named `<path>.json` with `<path>` being the item's path  
-**To modify the components of ALL items you must create a file called `all.json` in the `minecraft` namespace**
+**To modify the components of ALL items you must create a file named `all.json` in the `minecraft` namespace**
 
 Now, inside the JSON file, put the following content:
 ```json
