@@ -43,7 +43,7 @@ const config: Config = {
           sidebarPath: 'sidebars.ts',
           versions: {
             current: {
-              label: '1.0.0',
+              label: '1.1.0',
             },
             "1.0.0-beta.5": {
               label: '1.0.0 Beta 5',
@@ -74,7 +74,7 @@ const config: Config = {
         lastVersion: 'current',
         versions: {
           current: {
-            label: '1.0.0 Beta 3',
+            label: '1.0.0',
           },
         },
       } satisfies Content.Options),

@@ -195,30 +195,28 @@ import {Command, CommandInput, CommandEmpty, CommandGroup, CommandItem} from "@s
     ```json5
     {
       // The JSON schema for the config, this is for text editors to show syntax highlighting, do not change it
-      "$schema": "https://awakenedredstone.com/json-schema/autowhitelist/draft-06.json",
+      "$schema": "https://awakenedredstone.com/json-schema/autowhitelist/draft-03.json",
       // DO NOT CHANGE, MODIFYING THIS VALUE WILL BREAK THE CONFIGURATION FILE
-      "CONFIG_VERSION": 6,
+      "CONFIG_VERSION": 2,
       // When enabled, it will keep a cache of previous registered users and will use it to automatically add the user back (if they have the proper role)
       "enable_whitelist_cache": true,
-      /* The delay (in seconds) for checking for invalid and outdated entries. This ensures everything is up to date in case the bot misses an event
-         [Min: 10, Max: 600]
-       */
-      "periodic_check_delay": 60,
+      // The period the mod looks for outdated and invalid entries, this is an extra action to guarantee everything is updated
+      "update_period": 60,
+      // A list of ids to allow users to use the debug commands
+      "admins": [
+        387745099204919297
+      ],
       // The activity type shown on the bot status
       "bot_activity_type": "PLAYING",
+      // The bot command prefix
+      "prefix": "np!",
       // The time in seconds the bot will lock a whitelist entry after it is added or updated, use -1 to disable changing the linked username
       "lock_time": "1d",
-      // Your bot's token. Never share it, anyone with it has full control of the bot
+      // Your bot token. Never share it, anyone with it has full control of the bot
       "token": "NEVER SHARE YOUR BOT TOKEN",
-      "discord_server_id": 507304429255393322,
+      "discord_server_id": 988466506671194222,
       // When enabled, all interactions and slash commands will be ephemeral, meaning only the user can see the response.
       "ephemeral_replies": true,
-      // When enabled, the bot will cache the data of the users on discord, this reduces response time, but may cause higher memory usage on large servers.
-      "cache_discord_data": true,
-      /* The permission level used for command entries. This limits what commands the mod can run, you likely don't need to change this.
-         Check https://minecraft.wiki/w/Permission_level for more about permission levels.
-      */
-      "command_permission_level": 3,
       // The whitelist entry settings, please refer to the documentation to set them up
       "entries": [
         {
